@@ -1,0 +1,60 @@
+@import './AdminEvents.css';
+
+.admin-pages-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-select {
+  margin-bottom: 1.5rem;
+  max-width: 320px;
+}
+
+.page-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.page-sections-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-sections-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.seo-panel {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.seo-panel h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.image-preview {
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 1024px) {
+  .page-content-grid {
+    grid-template-columns: 1fr;
+  }
+}

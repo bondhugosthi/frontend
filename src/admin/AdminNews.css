@@ -1,0 +1,18 @@
+@import './AdminEvents.css';
+
+.admin-news-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.important-star {
+  color: var(--brand-gold);
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}

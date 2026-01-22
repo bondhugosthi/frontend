@@ -1,0 +1,41 @@
+@import './AdminEvents.css';
+
+.admin-contact-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.badge-new {
+  background-color: rgba(var(--brand-teal-rgb), 0.12);
+  color: var(--brand-teal);
+}
+
+.badge-read {
+  background-color: rgba(var(--brand-teal-rgb), 0.1);
+  color: var(--brand-teal);
+}
+
+.badge-replied {
+  background-color: rgba(var(--brand-teal-rgb), 0.12);
+  color: var(--brand-teal);
+}
+
+.badge-archived {
+  background-color: rgba(var(--brand-gold-rgb), 0.18);
+  color: var(--brand-gold);
+}
+
+.message-details {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.message-details strong {
+  color: var(--text-primary);
+}
+
+.message-body {
+  margin-top: 1rem;
+}

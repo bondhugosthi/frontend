@@ -1,0 +1,26 @@
+@import './AdminEvents.css';
+
+.admin-gallery-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.meta-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.media-upload-info {
+  margin: 1rem 0 0;
+  color: var(--text-secondary);
+}

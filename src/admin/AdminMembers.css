@@ -1,0 +1,49 @@
+@import './AdminEvents.css';
+
+.admin-members-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.member-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.member-thumb.fallback {
+  font-size: 1.2rem;
+}
+
+.committee-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  background-color: rgba(var(--brand-teal-rgb), 0.1);
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}

@@ -1,0 +1,35 @@
+@import './AdminEvents.css';
+
+.admin-settings-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.settings-form {
+  display: grid;
+  gap: 2rem;
+}
+
+.settings-section {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+}
+
+.settings-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.save-settings {
+  width: fit-content;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}

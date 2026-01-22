@@ -1,0 +1,22 @@
+@import './AdminEvents.css';
+
+.admin-social-work-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.meta-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}

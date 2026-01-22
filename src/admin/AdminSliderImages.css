@@ -1,0 +1,44 @@
+@import './AdminEvents.css';
+
+.admin-slider-images-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.slider-image-thumb {
+  width: 140px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider-image-placeholder {
+  width: 140px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.image-preview {
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}

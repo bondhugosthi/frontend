@@ -1,0 +1,308 @@
+.members-page {
+  margin-bottom: 0;
+  background-color: var(--bg-primary);
+}
+
+.role-filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.year-filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.role-filter-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-transform: capitalize;
+}
+
+.role-filter-btn:hover {
+  background-color: rgba(var(--brand-teal-rgb), 0.1);
+  color: var(--primary-color);
+  border-color: rgba(var(--brand-teal-rgb), 0.2);
+}
+
+.role-filter-btn.active {
+  background: linear-gradient(135deg, var(--brand-teal), var(--brand-gold));
+  color: var(--brand-cream);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(var(--brand-teal-rgb), 0.3);
+}
+
+.year-filter-btn {
+  padding: 0.6rem 1.25rem;
+  background-color: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.year-filter-btn:hover {
+  background-color: rgba(var(--brand-teal-rgb), 0.1);
+  color: var(--primary-color);
+  border-color: rgba(var(--brand-teal-rgb), 0.2);
+}
+
+.year-filter-btn.active {
+  background: linear-gradient(135deg, var(--brand-teal), var(--brand-gold));
+  color: var(--brand-cream);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(var(--brand-teal-rgb), 0.3);
+}
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.member-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.member-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--border-color));
+  overflow: hidden;
+}
+
+.member-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.member-card:hover .member-image-container img {
+  transform: scale(1.1);
+}
+
+.member-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(var(--brand-teal-rgb), 0.12), rgba(var(--brand-teal-rgb), 0.22));
+}
+
+.role-badge {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  box-shadow: var(--shadow-md);
+}
+
+.role-president {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-vice-president {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-secretary {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-treasurer {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-sports {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-cultural {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-volunteer {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.role-member {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  color: var(--brand-cream);
+}
+
+.member-content {
+  padding: 1.5rem;
+}
+
+.member-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.member-position {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.member-bio {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.member-achievements {
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.member-achievements strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.member-achievements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.member-achievements li {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.member-achievements li::before {
+  content: '*';
+  position: absolute;
+  left: 0;
+}
+
+.member-contact {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.contact-link {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: all var(--transition-base);
+}
+
+.contact-link:hover {
+  background: linear-gradient(135deg, var(--brand-teal), var(--brand-gold));
+  color: var(--brand-cream);
+  transform: translateY(-3px);
+}
+
+.no-members {
+  text-align: center;
+  padding: 5rem 2rem;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.no-members-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.no-members h3 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.no-members p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .members-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .members-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .role-filters {
+    flex-direction: column;
+  }
+
+  .role-filter-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .members-grid {
+    grid-template-columns: 1fr;
+  }
+}
