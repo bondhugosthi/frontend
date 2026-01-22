@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import Modal from 'react-modal';
@@ -30,11 +30,7 @@ const AdminSocialWork = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [formData, setFormData] = useState(defaultForm);
 
-  useEffect(() => {
-    fetchInitiatives();
-  }, [filterCategory]);
-
-  const fetchInitiatives = async () => {
+  const fetchInitiatives = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -46,7 +42,11 @@ const AdminSocialWork = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterCategory]);
+
+  useEffect(() => {
+    fetchInitiatives();
+  }, [fetchInitiatives]);
 
   const openModal = (item = null) => {
     setEditingItem(item);

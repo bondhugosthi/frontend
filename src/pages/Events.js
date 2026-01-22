@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaCalendarAlt } from 'react-icons/fa';
 import { eventsAPI } from '../utils/api';
@@ -13,11 +13,7 @@ const Events = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [activeType, setActiveType] = useState('all');
 
-  useEffect(() => {
-    fetchEvents();
-  }, [activeTab, activeType]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -31,7 +27,11 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab, activeType]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const tabs = [
     { id: 'all', label: 'All Events' },

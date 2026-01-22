@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaHeart, FaHandsHelping, FaGraduationCap, FaHospital, FaHome, FaMapMarkerAlt } from 'react-icons/fa';
 import { socialWorkAPI } from '../utils/api';
@@ -13,11 +13,7 @@ const SocialWork = () => {
   const [selectedYear, setSelectedYear] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  useEffect(() => {
-    fetchSocialWorkData();
-  }, [selectedYear, selectedCategory]);
-
-  const fetchSocialWorkData = async () => {
+  const fetchSocialWorkData = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -36,7 +32,11 @@ const SocialWork = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, selectedYear]);
+
+  useEffect(() => {
+    fetchSocialWorkData();
+  }, [fetchSocialWorkData]);
 
   const categories = [
     { id: 'all', label: 'All Categories', icon: <FaHeart /> },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaStar } from 'react-icons/fa';
 import Modal from 'react-modal';
@@ -31,11 +31,7 @@ const AdminNews = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [formData, setFormData] = useState(defaultForm);
 
-  useEffect(() => {
-    fetchNews();
-  }, [filterType]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -47,7 +43,11 @@ const AdminNews = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   const openModal = (item = null) => {
     setEditingItem(item);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaImages, FaCalendarAlt, FaEye } from 'react-icons/fa';
@@ -12,11 +12,7 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  useEffect(() => {
-    fetchGalleries();
-  }, [selectedCategory]);
-
-  const fetchGalleries = async () => {
+  const fetchGalleries = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -29,7 +25,11 @@ const Gallery = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    fetchGalleries();
+  }, [fetchGalleries]);
 
   const categories = [
     { id: 'all', label: 'All Albums' },

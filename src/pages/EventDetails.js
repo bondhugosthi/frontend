@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUsers, FaTrophy, FaArrowLeft } from 'react-icons/fa';
@@ -12,11 +12,7 @@ const EventDetails = () => {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchEventDetails();
-  }, [id]);
-
-  const fetchEventDetails = async () => {
+  const fetchEventDetails = useCallback(async () => {
     try {
       const response = await eventsAPI.getById(id);
       setEvent(response.data);
@@ -25,7 +21,11 @@ const EventDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchEventDetails();
+  }, [fetchEventDetails]);
 
   if (loading) {
     return <LoadingSpinner text="Loading event details..." />;

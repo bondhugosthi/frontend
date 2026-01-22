@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FaPlus,
@@ -36,11 +36,7 @@ const AdminGallery = () => {
   const [formData, setFormData] = useState(defaultForm);
   const [mediaFiles, setMediaFiles] = useState([]);
 
-  useEffect(() => {
-    fetchAlbums();
-  }, [filterCategory]);
-
-  const fetchAlbums = async () => {
+  const fetchAlbums = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -52,7 +48,11 @@ const AdminGallery = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterCategory]);
+
+  useEffect(() => {
+    fetchAlbums();
+  }, [fetchAlbums]);
 
   const openModal = (album = null) => {
     setEditingAlbum(album);

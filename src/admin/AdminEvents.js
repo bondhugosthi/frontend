@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -31,11 +31,7 @@ const AdminEvents = () => {
     coverImage: ''
   });
 
-  useEffect(() => {
-    fetchEvents();
-  }, [filterStatus, filterType]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -49,7 +45,11 @@ const AdminEvents = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterStatus, filterType]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

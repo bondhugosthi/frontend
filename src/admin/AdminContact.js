@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaReply, FaTrash, FaSearch } from 'react-icons/fa';
 import Modal from 'react-modal';
@@ -18,11 +18,7 @@ const AdminContact = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterCategory, setFilterCategory] = useState('all');
 
-  useEffect(() => {
-    fetchMessages();
-  }, [filterStatus, filterCategory]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -35,7 +31,11 @@ const AdminContact = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterCategory, filterStatus]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   const openMessage = async (message) => {
     try {

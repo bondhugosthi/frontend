@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaEye, FaArrowRight, FaStar, FaNewspaper } from 'react-icons/fa';
@@ -12,11 +12,7 @@ const News = () => {
   const [loading, setLoading] = useState(true);
   const [selectedType, setSelectedType] = useState('all');
 
-  useEffect(() => {
-    fetchNews();
-  }, [selectedType]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -29,7 +25,11 @@ const News = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedType]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   const types = [
     { id: 'all', label: 'All Posts' },

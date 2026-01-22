@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaTimes, FaCalendarAlt, FaImages, FaEye, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -13,11 +13,9 @@ const GalleryAlbum = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
 
-  useEffect(() => {
-    fetchAlbum();
-  }, [id]);
+  const mediaCount = album?.media?.length || 0;
 
-  const fetchAlbum = async () => {
+  const fetchAlbum = useCallback(async () => {
     try {
       const response = await galleryAPI.getById(id);
       setAlbum(response.data);
@@ -26,24 +24,25 @@ const GalleryAlbum = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const openLightbox = (index) => {
-    setCurrentImage(index);
-    setLightboxOpen(true);
-  };
-
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
-  };
+  }, []);
 
-  const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % album.media.length);
-  };
+  const nextImage = useCallback(() => {
+    if (!mediaCount) return;
+    setCurrentImage((prev) => (prev + 1) % mediaCount);
+  }, [mediaCount]);
 
-  const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + album.media.length) % album.media.length);
-  };
+  const prevImage = useCallback(() => {
+    if (!mediaCount) return;
+    setCurrentImage((prev) => (prev - 1 + mediaCount) % mediaCount);
+  }, [mediaCount]);
+
+  useEffect(() => {
+    fetchAlbum();
+  }, [fetchAlbum]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -55,7 +54,12 @@ const GalleryAlbum = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen]);
+  }, [lightboxOpen, closeLightbox, nextImage, prevImage]);
+
+  const openLightbox = (index) => {
+    setCurrentImage(index);
+    setLightboxOpen(true);
+  };
 
   if (loading) {
     return <LoadingSpinner text="Loading album..." />;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch, FaChartBar } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -15,17 +15,14 @@ const AdminActivityLogs = () => {
     search: ''
   });
 
-  useEffect(() => {
-    fetchLogs();
-    fetchStats();
-  }, [filters.module, filters.action]);
+  const { module: selectedModule, action: selectedAction } = filters;
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
-      if (filters.module !== 'all') params.module = filters.module;
-      if (filters.action !== 'all') params.action = filters.action;
+      if (selectedModule !== 'all') params.module = selectedModule;
+      if (selectedAction !== 'all') params.action = selectedAction;
       const response = await activityLogsAPI.getAll(params);
       setLogs(response.data.logs || []);
     } catch (error) {
@@ -33,16 +30,21 @@ const AdminActivityLogs = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedModule, selectedAction]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await activityLogsAPI.getStats();
       setStats(response.data);
     } catch (error) {
       toast.error('Failed to load log stats');
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchLogs();
+    fetchStats();
+  }, [fetchLogs, fetchStats]);
 
   const filteredLogs = logs.filter((log) => {
     const query = filters.search.toLowerCase();

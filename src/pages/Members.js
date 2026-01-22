@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaPhone, FaUsers } from 'react-icons/fa';
 import { membersAPI } from '../utils/api';
@@ -12,11 +12,7 @@ const Members = () => {
   const [selectedRole, setSelectedRole] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
 
-  useEffect(() => {
-    fetchMembers();
-  }, [selectedRole, selectedYear]);
-
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
     setLoading(true);
     try {
       const params = { isActive: true };
@@ -30,7 +26,11 @@ const Members = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedRole, selectedYear]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const roles = [
     { id: 'all', label: 'All Members' },

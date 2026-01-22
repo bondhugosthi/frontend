@@ -18,7 +18,7 @@ import {
   FaTrash,
   FaLock
 } from 'react-icons/fa';
-import { dashboardAPI, contactAPI } from '../utils/api';
+import { dashboardAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import './Dashboard.css';
 

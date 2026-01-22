@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaCalendarAlt, FaEye, FaTag, FaStar } from 'react-icons/fa';
@@ -12,11 +12,7 @@ const NewsDetails = () => {
   const [relatedNews, setRelatedNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchNewsDetails();
-  }, [id]);
-
-  const fetchNewsDetails = async () => {
+  const fetchNewsDetails = useCallback(async () => {
     try {
       const [newsRes, allNewsRes] = await Promise.all([
         newsAPI.getById(id),
@@ -30,7 +26,11 @@ const NewsDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchNewsDetails();
+  }, [fetchNewsDetails]);
 
   if (loading) {
     return <LoadingSpinner text="Loading news..." />;

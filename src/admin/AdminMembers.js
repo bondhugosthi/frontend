@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaUserTie } from 'react-icons/fa';
 import Modal from 'react-modal';
@@ -36,11 +36,7 @@ const AdminMembers = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [formData, setFormData] = useState(defaultForm);
 
-  useEffect(() => {
-    fetchMembers();
-  }, [filterRole, filterStatus]);
-
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -53,7 +49,11 @@ const AdminMembers = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterRole, filterStatus]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const openModal = (member = null) => {
     setEditingMember(member);

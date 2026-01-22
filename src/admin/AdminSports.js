@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FaPlus,
@@ -56,11 +56,7 @@ const AdminSports = () => {
   const [sportForm, setSportForm] = useState(defaultSportForm);
   const [tournamentForm, setTournamentForm] = useState(defaultTournamentForm);
 
-  useEffect(() => {
-    fetchSportsData();
-  }, [filterStatus, filterSport]);
-
-  const fetchSportsData = async () => {
+  const fetchSportsData = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -79,7 +75,11 @@ const AdminSports = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterSport, filterStatus]);
+
+  useEffect(() => {
+    fetchSportsData();
+  }, [fetchSportsData]);
 
   const openSportModal = (sport = null) => {
     setEditingSport(sport);
