@@ -35,6 +35,16 @@ const getRequestBody = async (req) => {
     return undefined;
   }
 
+  if (req.body) {
+    if (Buffer.isBuffer(req.body)) {
+      return req.body;
+    }
+    if (typeof req.body === 'string') {
+      return Buffer.from(req.body);
+    }
+    return Buffer.from(JSON.stringify(req.body));
+  }
+
   const chunks = [];
   for await (const chunk of req) {
     chunks.push(chunk);
@@ -90,6 +100,9 @@ module.exports = async (req, res) => {
 
     const headers = filterRequestHeaders(req.headers);
     headers['x-vercel-protection-bypass'] = bypassToken;
+    if (!headers['content-type'] && body) {
+      headers['content-type'] = 'application/json';
+    }
 
     const response = await fetch(targetUrl, {
       method: req.method,
