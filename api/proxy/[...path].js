@@ -3,7 +3,7 @@ const { URLSearchParams } = require('url');
 const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
 
 const buildTargetUrl = (req) => {
-  const baseUrl = normalizeBaseUrl(process.env.BACKEND_URL);
+  const baseUrl = normalizeBaseUrl(process.env.BACKEND_URL || process.env.REACT_APP_API_URL);
   const pathParts = Array.isArray(req.query.path) ? req.query.path : [req.query.path].filter(Boolean);
   const path = pathParts.join('/');
 
@@ -18,6 +18,11 @@ const buildTargetUrl = (req) => {
       params.append(key, value);
     }
   });
+
+  const bypassToken = getBypassToken();
+  if (bypassToken) {
+    params.set('x-vercel-protection-bypass', bypassToken);
+  }
 
   const queryString = params.toString();
   return `${baseUrl}/${path}${queryString ? `?${queryString}` : ''}`;
