@@ -1,4 +1,4 @@
-const DEFAULT_PROD_API_URL = 'https://backend-epzmj9z6d-bondhu-gosthis-projects.vercel.app';
+const DEFAULT_PROD_API_URL = '/api/proxy';
 const LOCAL_API_URL = 'http://localhost:5000';
 
 const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
@@ -11,13 +11,13 @@ const getRuntimeApiUrl = () => {
 };
 
 const resolveApiBaseUrl = () => {
-  if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
-  }
-
   const runtimeUrl = getRuntimeApiUrl();
   if (runtimeUrl) {
     return runtimeUrl;
+  }
+
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
   }
 
   if (process.env.NODE_ENV === 'production') {
