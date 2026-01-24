@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+import { API_BASE_URL } from '../utils/apiBaseUrl';
 
 const AuthContext = createContext();
 
@@ -32,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const res = await axios.get(`${API_URL}/api/auth/me`);
+          const res = await axios.get(`${API_BASE_URL}/api/auth/me`);
           setAdmin(res.data);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -47,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password
       });
@@ -74,7 +73,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${API_URL}/api/auth/logout`);
+      await axios.post(`${API_BASE_URL}/api/auth/logout`);
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
