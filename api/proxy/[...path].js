@@ -1,9 +1,23 @@
 const { URLSearchParams } = require('url');
 
 const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
+const isAbsoluteUrl = (value) => /^https?:\/\//i.test(value || '');
 
-const buildTargetUrl = (req) => {
-  const baseUrl = normalizeBaseUrl(process.env.BACKEND_URL || process.env.REACT_APP_API_URL);
+const getBackendBaseUrl = () => {
+  const backendUrl = normalizeBaseUrl(process.env.BACKEND_URL);
+  if (backendUrl) {
+    return backendUrl;
+  }
+
+  const apiUrl = normalizeBaseUrl(process.env.REACT_APP_API_URL);
+  if (isAbsoluteUrl(apiUrl)) {
+    return apiUrl;
+  }
+
+  return '';
+};
+
+const buildTargetUrl = (req, baseUrl) => {
   const pathParts = Array.isArray(req.query.path) ? req.query.path : [req.query.path].filter(Boolean);
   const path = pathParts.join('/');
 
@@ -80,26 +94,28 @@ const writeResponse = async (res, response) => {
 };
 
 module.exports = async (req, res) => {
-  const baseUrl = normalizeBaseUrl(process.env.BACKEND_URL);
+  const baseUrl = getBackendBaseUrl();
   if (!baseUrl) {
     res.statusCode = 500;
-    res.end('BACKEND_URL is not configured.');
+    res.end('BACKEND_URL (absolute URL) is not configured.');
     return;
   }
 
-  const bypassToken = getBypassToken();
-  if (!bypassToken) {
+  if (!isAbsoluteUrl(baseUrl)) {
     res.statusCode = 500;
-    res.end('VERCEL_PROTECTION_BYPASS is not configured.');
+    res.end('BACKEND_URL must be an absolute URL (https://...).');
     return;
   }
 
   try {
-    const targetUrl = buildTargetUrl(req);
+    const targetUrl = buildTargetUrl(req, baseUrl);
     const body = await getRequestBody(req);
 
     const headers = filterRequestHeaders(req.headers);
-    headers['x-vercel-protection-bypass'] = bypassToken;
+    const bypassToken = getBypassToken();
+    if (bypassToken) {
+      headers['x-vercel-protection-bypass'] = bypassToken;
+    }
     if (!headers['content-type'] && body) {
       headers['content-type'] = 'application/json';
     }
