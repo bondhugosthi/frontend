@@ -1,5 +1,4 @@
 const DEFAULT_PROD_API_URL = '/api/proxy';
-const LOCAL_API_URL = 'http://localhost:5000';
 
 const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
 
@@ -12,20 +11,29 @@ const getRuntimeApiUrl = () => {
 
 const isRelativeUrl = (value) => typeof value === 'string' && value.startsWith('/');
 
+const getEnvApiUrl = () => (process.env.REACT_APP_API_URL || '').trim();
+
 const resolveApiBaseUrl = () => {
   const runtimeUrl = getRuntimeApiUrl();
   if (runtimeUrl) {
     return runtimeUrl;
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    if (isRelativeUrl(process.env.REACT_APP_API_URL)) {
-      return process.env.REACT_APP_API_URL;
+  const envUrl = getEnvApiUrl();
+
+  if (process.env.NODE_ENV === 'development') {
+    if (envUrl && !isRelativeUrl(envUrl)) {
+      return envUrl;
     }
-    return DEFAULT_PROD_API_URL;
+    // Use CRA dev proxy for relative or empty values.
+    return '';
   }
 
-  return process.env.REACT_APP_API_URL || LOCAL_API_URL;
+  if (envUrl) {
+    return envUrl;
+  }
+
+  return DEFAULT_PROD_API_URL;
 };
 
 export const API_BASE_URL = normalizeBaseUrl(resolveApiBaseUrl());
