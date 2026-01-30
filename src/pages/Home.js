@@ -73,6 +73,20 @@ const Home = () => {
     ? sliderImages
     : [{ imageUrl: heroContent.image, title: heroContent.titleMain }];
 
+  const totalGalleryPhotos = recentGalleries.reduce(
+    (total, album) => total + (album.media?.length || 0),
+    0
+  );
+
+  const latestGalleryDate = recentGalleries[0]?.date || recentGalleries[0]?.createdAt;
+  const latestGalleryLabel = latestGalleryDate
+    ? new Date(latestGalleryDate).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+    : '—';
+
   const normalizeSectionName = (value) => (value || '')
     .toLowerCase()
     .replace(/[\s-]+/g, '_')
@@ -380,50 +394,81 @@ const Home = () => {
       {/* Gallery Preview Section */}
       <section className="section section-dark home-gallery">
         <div className="container">
-          <div className="section-header text-center">
-            <h2 className="section-title">Captured Moments</h2>
-            <p className="section-subtitle">Relive the beautiful memories we've created together</p>
-          </div>
+          <div className="gallery-showcase">
+            <div className="gallery-copy">
+              <span className="gallery-kicker">Captured Moments</span>
+              <h2 className="gallery-title">Every frame tells our story</h2>
+              <p className="gallery-subtitle">Relive the beautiful memories we've created together</p>
 
-          {recentGalleries.length > 0 ? (
-            <div className="gallery-preview-grid">
-              {recentGalleries.map((album, index) => (
-                <motion.div
-                  key={album._id}
-                  className="gallery-preview-item"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <Link to={`/gallery/${album._id}`}>
-                    <div className="gallery-preview-image">
-                      <img
-                        src={resolveMediaUrl(album.coverImage)}
-                        alt={album.albumName}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="gallery-preview-overlay">
-                        <h3>{album.albumName}</h3>
-                        <p>{album.media?.length || 0} Photos</p>
-                      </div>
-                    </div>
+              <div className="gallery-metrics">
+                <div className="gallery-metric">
+                  <span className="gallery-metric-label">Albums</span>
+                  <span className="gallery-metric-value">{recentGalleries.length}</span>
+                </div>
+                <div className="gallery-metric">
+                  <span className="gallery-metric-label">Photos</span>
+                  <span className="gallery-metric-value">{totalGalleryPhotos}</span>
+                </div>
+                <div className="gallery-metric">
+                  <span className="gallery-metric-label">Latest</span>
+                  <span className="gallery-metric-value">{latestGalleryLabel}</span>
+                </div>
+              </div>
+
+              <div className="gallery-actions">
+                <Link to="/gallery" className="btn btn-primary gallery-btn">
+                  View Full Gallery <FaArrowRight />
+                </Link>
+                {recentGalleries[0]?._id && (
+                  <Link to={`/gallery/${recentGalleries[0]._id}`} className="btn btn-outline gallery-btn-outline">
+                    Explore Latest Album
                   </Link>
-                </motion.div>
-              ))}
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="no-data">
-              <p>No gallery albums available.</p>
-            </div>
-          )}
 
-          <div className="text-center" style={{ marginTop: '2rem' }}>
-            <Link to="/gallery" className="btn btn-primary">
-              View Full Gallery <FaArrowRight />
-            </Link>
+            <div className="gallery-collage">
+              {recentGalleries.length > 0 ? (
+                <div className={`gallery-mosaic ${recentGalleries.length < 3 ? 'gallery-mosaic-compact' : ''}`}>
+                  {recentGalleries.slice(0, 3).map((album, index) => (
+                    <motion.div
+                      key={album._id}
+                      className={`gallery-mosaic-item mosaic-${index + 1}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                    >
+                      <Link to={`/gallery/${album._id}`} className="gallery-mosaic-link">
+                        <div className="gallery-mosaic-image">
+                          <img
+                            src={resolveMediaUrl(album.coverImage)}
+                            alt={album.albumName}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                        <div className="gallery-mosaic-overlay">
+                          <span className="gallery-mosaic-pill">{(album.category || 'album').replace('_', ' ')}</span>
+                          <div className="gallery-mosaic-info">
+                            <h3>{album.albumName}</h3>
+                            <p>{album.media?.length || 0} Photos</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="gallery-empty">
+                  <div className="gallery-empty-card">
+                    <FaImages />
+                    <h3>No albums yet</h3>
+                    <p>Upload your first gallery to start showcasing club memories.</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
