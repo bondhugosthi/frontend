@@ -1,6 +1,7 @@
 const { URLSearchParams } = require('url');
 
-const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
+const stripApiSuffix = (url) => (url || '').replace(/\/api\/?$/, '');
+const normalizeBaseUrl = (url) => stripApiSuffix((url || '').replace(/\/+$/, ''));
 const isAbsoluteUrl = (value) => /^https?:\/\//i.test(value || '');
 
 const getBackendBaseUrl = () => {

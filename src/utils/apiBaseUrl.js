@@ -1,6 +1,11 @@
 const DEFAULT_PROD_API_URL = '/api/proxy';
 
-const normalizeBaseUrl = (url) => (url || '').replace(/\/+$/, '');
+const stripApiSuffix = (url) => (url || '').replace(/\/api\/?$/, '');
+
+const normalizeBaseUrl = (url) => {
+  const trimmed = (url || '').replace(/\/+$/, '');
+  return stripApiSuffix(trimmed);
+};
 
 const getRuntimeApiUrl = () => {
   if (typeof window === 'undefined') {
