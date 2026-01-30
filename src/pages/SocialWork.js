@@ -4,6 +4,7 @@ import { FaHeart, FaHandsHelping, FaGraduationCap, FaHospital, FaHome, FaMapMark
 import { socialWorkAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './SocialWork.css';
 
 const SocialWork = () => {
@@ -178,7 +179,7 @@ const SocialWork = () => {
                 >
                   {work.coverImage && (
                     <div className="work-card-image">
-                      <img src={work.coverImage} alt={work.title} />
+                      <img src={resolveMediaUrl(work.coverImage)} alt={work.title} />
                       <div className="work-card-overlay">
                         <span className="category-badge">
                           {getCategoryIcon(work.category)}

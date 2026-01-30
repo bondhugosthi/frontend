@@ -4,6 +4,7 @@ import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaUse
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { socialWorkAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminSocialWork.css';
 
 Modal.setAppElement('#root');
@@ -413,7 +414,7 @@ const AdminSocialWork = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.coverImage && (
               <div className="image-preview">
-                <img src={formData.coverImage} alt="Preview" />
+                <img src={resolveMediaUrl(formData.coverImage)} alt="Preview" />
               </div>
             )}
           </div>

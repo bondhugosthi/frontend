@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaArrowLeft, FaTimes, FaCalendarAlt, FaImages, FaEye, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { galleryAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './GalleryAlbum.css';
 
 const GalleryAlbum = () => {
@@ -124,7 +125,7 @@ const GalleryAlbum = () => {
                   onClick={() => openLightbox(index)}
                 >
                   <img 
-                    src={media.thumbnail || media.url} 
+                    src={resolveMediaUrl(media.thumbnail || media.url)} 
                     alt={media.caption || `Photo ${index + 1}`} 
                   />
                   {media.caption && (
@@ -163,7 +164,7 @@ const GalleryAlbum = () => {
           </button>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <img 
-              src={album.media[currentImage].url} 
+              src={resolveMediaUrl(album.media[currentImage].url)} 
               alt={album.media[currentImage].caption || `Photo ${currentImage + 1}`} 
             />
             {album.media[currentImage].caption && (

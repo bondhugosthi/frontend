@@ -4,6 +4,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaPhone, FaUsers } from
 import { membersAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Members.css';
 
 const Members = () => {
@@ -114,7 +115,7 @@ const Members = () => {
                 >
                   <div className="member-image-container">
                     {member.photo ? (
-                      <img src={member.photo} alt={member.name} />
+                      <img src={resolveMediaUrl(member.photo)} alt={member.name} />
                     ) : (
                       <div className="member-avatar">
                         {member.name.charAt(0).toUpperCase()}

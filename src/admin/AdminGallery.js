@@ -11,6 +11,7 @@ import {
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { galleryAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminGallery.css';
 
 Modal.setAppElement('#root');
@@ -392,7 +393,7 @@ const AdminGallery = () => {
           </div>
           {formData.coverImage && (
             <div className="image-preview">
-              <img src={formData.coverImage} alt="Cover Preview" />
+              <img src={resolveMediaUrl(formData.coverImage)} alt="Cover Preview" />
             </div>
           )}
           <div className="form-row">

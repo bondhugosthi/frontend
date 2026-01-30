@@ -4,6 +4,7 @@ import { FaPlus, FaEdit, FaTrash, FaImages } from 'react-icons/fa';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { sliderImagesAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminSliderImages.css';
 
 Modal.setAppElement('#root');
@@ -165,7 +166,7 @@ const AdminSliderImages = () => {
                 >
                   <td>
                     {image.imageUrl ? (
-                      <img className="slider-image-thumb" src={image.imageUrl} alt={image.title || 'Slider'} />
+                      <img className="slider-image-thumb" src={resolveMediaUrl(image.imageUrl)} alt={image.title || 'Slider'} />
                     ) : (
                       <div className="slider-image-placeholder">
                         <FaImages />
@@ -245,7 +246,7 @@ const AdminSliderImages = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.imageUrl && (
               <div className="image-preview">
-                <img src={formData.imageUrl} alt="Preview" />
+                <img src={resolveMediaUrl(formData.imageUrl)} alt="Preview" />
               </div>
             )}
           </div>

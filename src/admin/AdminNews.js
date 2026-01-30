@@ -4,6 +4,7 @@ import { FaPlus, FaEdit, FaTrash, FaSearch, FaStar } from 'react-icons/fa';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { newsAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminNews.css';
 
 Modal.setAppElement('#root');
@@ -390,7 +391,7 @@ const AdminNews = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.image && (
               <div className="image-preview">
-                <img src={formData.image} alt="Preview" />
+                <img src={resolveMediaUrl(formData.image)} alt="Preview" />
               </div>
             )}
           </div>

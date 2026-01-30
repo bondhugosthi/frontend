@@ -6,6 +6,7 @@ import Slider from 'react-slick';
 import { eventsAPI, galleryAPI, newsAPI, sliderImagesAPI, pagesAPI, publicAPI } from '../utils/api';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Home.css';
 
 const Home = () => {
@@ -169,7 +170,7 @@ const Home = () => {
               <div key={slide._id || slide.imageUrl || index} className="hero-slide">
                 <div
                   className="hero-slide-image"
-                  style={{ backgroundImage: `url(${slide.imageUrl})` }}
+                  style={{ backgroundImage: `url(${resolveMediaUrl(slide.imageUrl)})` }}
                   role="img"
                   aria-label={slide.title || 'Bondhu Gosthi'}
                 />
@@ -296,7 +297,7 @@ const Home = () => {
             <div className="home-about-image">
               {aboutImage ? (
                 <motion.img
-                  src={aboutImage}
+                  src={resolveMediaUrl(aboutImage)}
                   alt={aboutSection?.title || 'Bondhu Gosthi'}
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -396,7 +397,7 @@ const Home = () => {
                 >
                   <Link to={`/gallery/${album._id}`}>
                     <div className="gallery-preview-image">
-                      <img src={album.coverImage} alt={album.albumName} />
+                      <img src={resolveMediaUrl(album.coverImage)} alt={album.albumName} />
                       <div className="gallery-preview-overlay">
                         <h3>{album.albumName}</h3>
                         <p>{album.media?.length || 0} Photos</p>
@@ -447,7 +448,7 @@ const Home = () => {
                 >
                   {news.image && (
                     <div className="news-card-image">
-                      <img src={news.image} alt={news.title} />
+                      <img src={resolveMediaUrl(news.image)} alt={news.title} />
                     </div>
                   )}
                   <div className="news-card-content">

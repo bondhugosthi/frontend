@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaSave } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { settingsAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminSettings.css';
 
 const defaultForm = {
@@ -179,7 +180,7 @@ const AdminSettings = () => {
               <input type="file" accept="image/*" className="form-input" onChange={(e) => handleUpload(e, 'logo')} />
               {formData.logo && (
                 <div className="image-preview">
-                  <img src={formData.logo} alt="Logo Preview" />
+                  <img src={resolveMediaUrl(formData.logo)} alt="Logo Preview" />
                 </div>
               )}
             </div>
@@ -188,7 +189,7 @@ const AdminSettings = () => {
               <input type="file" accept="image/*" className="form-input" onChange={(e) => handleUpload(e, 'favicon')} />
               {formData.favicon && (
                 <div className="image-preview">
-                  <img src={formData.favicon} alt="Favicon Preview" />
+                  <img src={resolveMediaUrl(formData.favicon)} alt="Favicon Preview" />
                 </div>
               )}
             </div>

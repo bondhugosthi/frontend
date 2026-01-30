@@ -4,6 +4,7 @@ import { FaPlus, FaEdit, FaTrash, FaSearch, FaUserTie } from 'react-icons/fa';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { membersAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminMembers.css';
 
 Modal.setAppElement('#root');
@@ -261,7 +262,7 @@ const AdminMembers = () => {
                   <td>
                     <div className="member-row">
                       {member.photo ? (
-                        <img src={member.photo} alt={member.name} className="member-thumb" />
+                        <img src={resolveMediaUrl(member.photo)} alt={member.name} className="member-thumb" />
                       ) : (
                         <div className="member-thumb fallback">
                           {member.name.charAt(0).toUpperCase()}
@@ -495,7 +496,7 @@ const AdminMembers = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handlePhotoUpload} />
             {formData.photo && (
               <div className="image-preview">
-                <img src={formData.photo} alt="Profile Preview" />
+                <img src={resolveMediaUrl(formData.photo)} alt="Profile Preview" />
               </div>
             )}
           </div>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaArrowLeft, FaCalendarAlt, FaEye, FaTag, FaStar } from 'react-icons/fa';
 import { newsAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './NewsDetails.css';
 
 const NewsDetails = () => {
@@ -109,7 +110,7 @@ const NewsDetails = () => {
             >
               {news.image && (
                 <div className="article-image">
-                  <img src={news.image} alt={news.title} />
+                  <img src={resolveMediaUrl(news.image)} alt={news.title} />
                 </div>
               )}
 
@@ -148,7 +149,7 @@ const NewsDetails = () => {
                       >
                         {item.image && (
                           <div className="related-image">
-                            <img src={item.image} alt={item.title} />
+                            <img src={resolveMediaUrl(item.image)} alt={item.title} />
                           </div>
                         )}
                         <div className="related-content">

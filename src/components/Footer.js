@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebook, FaInstagram, FaYoutube, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart, FaLock } from 'react-icons/fa';
 import { settingsAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Footer.css';
 
 const Footer = () => {
@@ -65,7 +66,7 @@ const Footer = () => {
                   {branding.logo ? (
                     <img
                       className="logo-image"
-                      src={branding.logo}
+                      src={resolveMediaUrl(branding.logo)}
                       alt={branding.websiteName || 'Bondhu Gosthi'}
                     />
                   ) : (

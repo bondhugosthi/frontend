@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { eventsAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import Modal from 'react-modal';
 import './AdminEvents.css';
 
@@ -272,7 +273,7 @@ const AdminEvents = () => {
                   <td>
                     <div className="event-info">
                       {event.coverImage && (
-                        <img src={event.coverImage} alt={event.title} className="event-thumb" />
+                        <img src={resolveMediaUrl(event.coverImage)} alt={event.title} className="event-thumb" />
                       )}
                       <div>
                         <div className="event-title">{event.title}</div>
@@ -502,7 +503,7 @@ const AdminEvents = () => {
             />
             {formData.coverImage && (
               <div className="image-preview">
-                <img src={formData.coverImage} alt="Preview" />
+                <img src={resolveMediaUrl(formData.coverImage)} alt="Preview" />
               </div>
             )}
           </div>

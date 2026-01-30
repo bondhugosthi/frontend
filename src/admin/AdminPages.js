@@ -4,6 +4,7 @@ import { FaPlus, FaEdit, FaSave, FaTrash } from 'react-icons/fa';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { pagesAPI, uploadAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminPages.css';
 
 Modal.setAppElement('#root');
@@ -431,7 +432,7 @@ const AdminPages = ({ defaultPageName = 'home', lockPageSelect = false }) => {
             {sectionForm.images && (
               <div className="image-preview">
                 <img
-                  src={sectionForm.images.split(',').map((img) => img.trim()).filter(Boolean)[0]}
+                  src={resolveMediaUrl(sectionForm.images.split(',').map((img) => img.trim()).filter(Boolean)[0])}
                   alt="Section Preview"
                 />
               </div>

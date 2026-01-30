@@ -24,6 +24,7 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { settingsAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
@@ -102,7 +103,7 @@ const AdminLayout = () => {
               {branding.logo ? (
                 <img
                   className="logo-image"
-                  src={branding.logo}
+                  src={resolveMediaUrl(branding.logo)}
                   alt={branding.websiteName || 'Bondhu Gosthi'}
                 />
               ) : (

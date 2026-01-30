@@ -5,6 +5,7 @@ import { FaCalendarAlt, FaEye, FaArrowRight, FaStar, FaNewspaper } from 'react-i
 import { newsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './News.css';
 
 const News = () => {
@@ -91,7 +92,7 @@ const News = () => {
                   {item.image && (
                     <Link to={`/news/${item._id}`} className="news-image-link">
                       <div className="news-image">
-                        <img src={item.image} alt={item.title} />
+                        <img src={resolveMediaUrl(item.image)} alt={item.title} />
                         {item.isImportant && (
                           <span className="important-badge">
                             <FaStar /> Important

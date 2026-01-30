@@ -5,6 +5,7 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUsers, FaTrophy, FaArrowLeft 
 import { format } from 'date-fns';
 import { eventsAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './EventDetails.css';
 
 const EventDetails = () => {
@@ -53,7 +54,7 @@ const EventDetails = () => {
   return (
     <div className="event-details-page">
       {/* Hero Section */}
-      <div className="event-hero" style={{ backgroundImage: `url(${event.coverImage})` }}>
+      <div className="event-hero" style={{ backgroundImage: `url(${resolveMediaUrl(event.coverImage)})` }}>
         <div className="event-hero-overlay"></div>
         <div className="container">
           <div className="event-hero-content">
@@ -126,7 +127,7 @@ const EventDetails = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <img src={image.url} alt={image.caption || `Gallery ${index + 1}`} />
+                        <img src={resolveMediaUrl(image.url)} alt={image.caption || `Gallery ${index + 1}`} />
                         {image.caption && (
                           <div className="gallery-caption">{image.caption}</div>
                         )}

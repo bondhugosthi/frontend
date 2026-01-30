@@ -5,6 +5,7 @@ import { FaImages, FaCalendarAlt, FaEye } from 'react-icons/fa';
 import { galleryAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Gallery.css';
 
 const Gallery = () => {
@@ -80,7 +81,7 @@ const Gallery = () => {
                   <Link to={`/gallery/${album._id}`} className="gallery-album-card">
                     <div className="album-image-container">
                       <img 
-                        src={album.coverImage || '/images/default-album.jpg'} 
+                        src={resolveMediaUrl(album.coverImage) || '/images/default-album.jpg'} 
                         alt={album.albumName} 
                       />
                       <div className="album-overlay">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { settingsAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -112,7 +113,7 @@ const Navbar = () => {
               {branding.logo ? (
                 <img
                   className="logo-image"
-                  src={branding.logo}
+                  src={resolveMediaUrl(branding.logo)}
                   alt={branding.websiteName || 'Bondhu Gosthi'}
                 />
               ) : (
