@@ -9,6 +9,8 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoadingSpinner from './components/LoadingSpinner';
+import ProtectedRoute from './components/ProtectedRoute';
+import CookieConsent from './components/CookieConsent';
 
 // Public Pages (lazy)
 const Home = lazy(() => import('./pages/Home'));
@@ -43,10 +45,6 @@ const AdminUsers = lazy(() => import('./admin/AdminUsers'));
 const AdminBackups = lazy(() => import('./admin/AdminBackups'));
 const AdminSecurity = lazy(() => import('./admin/AdminSecurity'));
 const AdminActivityLogs = lazy(() => import('./admin/AdminActivityLogs'));
-
-// Protected Route
-import ProtectedRoute from './components/ProtectedRoute';
-import CookieConsent from './components/CookieConsent';
 
 // 404 Page
 const NotFound = lazy(() => import('./pages/NotFound'));
