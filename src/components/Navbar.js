@@ -7,17 +7,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const getInitialTheme = () => {
-    if (typeof window === 'undefined') {
-      return 'light';
-    }
-
-    const storedTheme = window.localStorage.getItem('theme');
-    if (storedTheme === 'light' || storedTheme === 'dark') {
-      return storedTheme;
-    }
-
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
+    return 'light';
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +28,9 @@ const Navbar = () => {
     }
 
     document.documentElement.setAttribute('data-theme', theme);
-    window.localStorage.setItem('theme', theme);
+    if (window.localStorage.getItem('theme')) {
+      window.localStorage.removeItem('theme');
+    }
   }, [theme]);
 
   useEffect(() => {
