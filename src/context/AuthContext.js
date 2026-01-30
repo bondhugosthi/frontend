@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../utils/apiBaseUrl';
 
 const AuthContext = createContext();
+const REQUEST_CONFIG = { timeout: 8000 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const res = await axios.get(`${API_BASE_URL}/api/auth/me`);
+          const res = await axios.get(`${API_BASE_URL}/api/auth/me`, REQUEST_CONFIG);
           setAdmin(res.data);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -46,10 +47,14 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
-        email,
-        password
-      });
+      const res = await axios.post(
+        `${API_BASE_URL}/api/auth/login`,
+        {
+          email,
+          password
+        },
+        REQUEST_CONFIG
+      );
 
       const { token: newToken, ...adminData } = res.data;
       
@@ -73,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/api/auth/logout`);
+      await axios.post(`${API_BASE_URL}/api/auth/logout`, null, REQUEST_CONFIG);
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -94,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

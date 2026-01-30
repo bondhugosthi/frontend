@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CORE_CACHE = `bg-core-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `bg-runtime-${CACHE_VERSION}`;
 const IMAGE_CACHE = `bg-images-${CACHE_VERSION}`;
