@@ -43,6 +43,7 @@ import AdminActivityLogs from './admin/AdminActivityLogs';
 
 // Protected Route
 import ProtectedRoute from './components/ProtectedRoute';
+import CookieConsent from './components/CookieConsent';
 
 // 404 Page
 import NotFound from './pages/NotFound';
@@ -201,6 +202,7 @@ function App() {
             draggable
             pauseOnHover
           />
+          <CookieConsent />
         </div>
       </AuthProvider>
     </Router>
