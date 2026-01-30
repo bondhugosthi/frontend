@@ -13,6 +13,7 @@ const Footer = () => {
     websiteName: '',
     tagline: ''
   });
+  const [istTime, setIstTime] = useState(() => new Date());
 
   const quickLinks = [
     { path: '/about', label: 'About Us' },
@@ -53,6 +54,37 @@ const Footer = () => {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIstTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const istFormatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    weekday: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+
+  const formatIst = (value) => {
+    const parts = istFormatter.formatToParts(value);
+    const data = {};
+    parts.forEach((part) => {
+      if (part.type !== 'literal') {
+        data[part.type] = part.value;
+      }
+    });
+    return `${data.day}/${data.month}/${data.year}, ${data.weekday}, ${data.hour}:${data.minute}:${data.second} ${data.dayPeriod}`;
+  };
 
   return (
     <footer className="footer">
@@ -153,6 +185,11 @@ const Footer = () => {
             <p className="copyright">
               Copyright {new Date().getFullYear()} Bondhu Gosthi. Made with <FaHeart className="heart-icon" /> by Our Team
             </p>
+
+            <div className="footer-live-time" aria-live="polite">
+              {formatIst(istTime)}
+              <span className="footer-timezone">IST</span>
+            </div>
             
             <button 
               className="admin-login-btn"

@@ -175,6 +175,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .copyright {
@@ -183,6 +185,33 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.footer-live-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--brand-cream-rgb), 0.12);
+  border: 1px solid rgba(var(--brand-cream-rgb), 0.2);
+  color: rgba(var(--brand-cream-rgb), 0.85);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.footer-timezone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--brand-gold-rgb), 0.2);
+  color: var(--brand-gold);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .heart-icon {
@@ -266,5 +295,10 @@
 
   .copyright {
     justify-content: center;
+  }
+
+  .footer-live-time {
+    justify-content: center;
+    width: 100%;
   }
 }
