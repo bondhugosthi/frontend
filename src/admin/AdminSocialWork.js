@@ -414,7 +414,12 @@ const AdminSocialWork = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.coverImage && (
               <div className="image-preview">
-                <img src={resolveMediaUrl(formData.coverImage)} alt="Preview" />
+                <img
+                  src={resolveMediaUrl(formData.coverImage)}
+                  alt="Preview"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
           </div>

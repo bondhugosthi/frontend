@@ -299,6 +299,8 @@ const Home = () => {
                 <motion.img
                   src={resolveMediaUrl(aboutImage)}
                   alt={aboutSection?.title || 'Bondhu Gosthi'}
+                  loading="lazy"
+                  decoding="async"
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
@@ -397,7 +399,12 @@ const Home = () => {
                 >
                   <Link to={`/gallery/${album._id}`}>
                     <div className="gallery-preview-image">
-                      <img src={resolveMediaUrl(album.coverImage)} alt={album.albumName} />
+                      <img
+                        src={resolveMediaUrl(album.coverImage)}
+                        alt={album.albumName}
+                        loading="lazy"
+                        decoding="async"
+                      />
                       <div className="gallery-preview-overlay">
                         <h3>{album.albumName}</h3>
                         <p>{album.media?.length || 0} Photos</p>
@@ -448,7 +455,12 @@ const Home = () => {
                 >
                   {news.image && (
                     <div className="news-card-image">
-                      <img src={resolveMediaUrl(news.image)} alt={news.title} />
+                      <img
+                        src={resolveMediaUrl(news.image)}
+                        alt={news.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   )}
                   <div className="news-card-content">

@@ -127,6 +127,8 @@ const GalleryAlbum = () => {
                   <img 
                     src={resolveMediaUrl(media.thumbnail || media.url)} 
                     alt={media.caption || `Photo ${index + 1}`} 
+                    loading="lazy"
+                    decoding="async"
                   />
                   {media.caption && (
                     <div className="photo-caption">{media.caption}</div>
@@ -166,6 +168,8 @@ const GalleryAlbum = () => {
             <img 
               src={resolveMediaUrl(album.media[currentImage].url)} 
               alt={album.media[currentImage].caption || `Photo ${currentImage + 1}`} 
+              loading="lazy"
+              decoding="async"
             />
             {album.media[currentImage].caption && (
               <div className="lightbox-caption">

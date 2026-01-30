@@ -180,7 +180,12 @@ const AdminSettings = () => {
               <input type="file" accept="image/*" className="form-input" onChange={(e) => handleUpload(e, 'logo')} />
               {formData.logo && (
                 <div className="image-preview">
-                  <img src={resolveMediaUrl(formData.logo)} alt="Logo Preview" />
+                  <img
+                    src={resolveMediaUrl(formData.logo)}
+                    alt="Logo Preview"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               )}
             </div>
@@ -189,7 +194,12 @@ const AdminSettings = () => {
               <input type="file" accept="image/*" className="form-input" onChange={(e) => handleUpload(e, 'favicon')} />
               {formData.favicon && (
                 <div className="image-preview">
-                  <img src={resolveMediaUrl(formData.favicon)} alt="Favicon Preview" />
+                  <img
+                    src={resolveMediaUrl(formData.favicon)}
+                    alt="Favicon Preview"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               )}
             </div>

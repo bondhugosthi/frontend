@@ -393,7 +393,12 @@ const AdminGallery = () => {
           </div>
           {formData.coverImage && (
             <div className="image-preview">
-              <img src={resolveMediaUrl(formData.coverImage)} alt="Cover Preview" />
+              <img
+                src={resolveMediaUrl(formData.coverImage)}
+                alt="Cover Preview"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           )}
           <div className="form-row">

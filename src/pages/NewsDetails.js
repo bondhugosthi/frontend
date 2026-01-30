@@ -110,7 +110,12 @@ const NewsDetails = () => {
             >
               {news.image && (
                 <div className="article-image">
-                  <img src={resolveMediaUrl(news.image)} alt={news.title} />
+                  <img
+                    src={resolveMediaUrl(news.image)}
+                    alt={news.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               )}
 
@@ -149,7 +154,12 @@ const NewsDetails = () => {
                       >
                         {item.image && (
                           <div className="related-image">
-                            <img src={resolveMediaUrl(item.image)} alt={item.title} />
+                            <img
+                              src={resolveMediaUrl(item.image)}
+                              alt={item.title}
+                              loading="lazy"
+                              decoding="async"
+                            />
                           </div>
                         )}
                         <div className="related-content">

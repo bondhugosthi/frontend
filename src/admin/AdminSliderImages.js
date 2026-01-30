@@ -166,7 +166,13 @@ const AdminSliderImages = () => {
                 >
                   <td>
                     {image.imageUrl ? (
-                      <img className="slider-image-thumb" src={resolveMediaUrl(image.imageUrl)} alt={image.title || 'Slider'} />
+                      <img
+                        className="slider-image-thumb"
+                        src={resolveMediaUrl(image.imageUrl)}
+                        alt={image.title || 'Slider'}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <div className="slider-image-placeholder">
                         <FaImages />
@@ -246,7 +252,12 @@ const AdminSliderImages = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.imageUrl && (
               <div className="image-preview">
-                <img src={resolveMediaUrl(formData.imageUrl)} alt="Preview" />
+                <img
+                  src={resolveMediaUrl(formData.imageUrl)}
+                  alt="Preview"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
           </div>

@@ -127,7 +127,12 @@ const EventDetails = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <img src={resolveMediaUrl(image.url)} alt={image.caption || `Gallery ${index + 1}`} />
+                        <img
+                          src={resolveMediaUrl(image.url)}
+                          alt={image.caption || `Gallery ${index + 1}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
                         {image.caption && (
                           <div className="gallery-caption">{image.caption}</div>
                         )}

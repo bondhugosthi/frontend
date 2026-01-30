@@ -262,7 +262,13 @@ const AdminMembers = () => {
                   <td>
                     <div className="member-row">
                       {member.photo ? (
-                        <img src={resolveMediaUrl(member.photo)} alt={member.name} className="member-thumb" />
+                        <img
+                          src={resolveMediaUrl(member.photo)}
+                          alt={member.name}
+                          className="member-thumb"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       ) : (
                         <div className="member-thumb fallback">
                           {member.name.charAt(0).toUpperCase()}
@@ -496,7 +502,12 @@ const AdminMembers = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handlePhotoUpload} />
             {formData.photo && (
               <div className="image-preview">
-                <img src={resolveMediaUrl(formData.photo)} alt="Profile Preview" />
+                <img
+                  src={resolveMediaUrl(formData.photo)}
+                  alt="Profile Preview"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
           </div>

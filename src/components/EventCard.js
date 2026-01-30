@@ -31,7 +31,12 @@ const EventCard = ({ event }) => {
     <div className="event-card">
       {event.coverImage && (
         <div className="event-card-image">
-          <img src={resolveMediaUrl(event.coverImage)} alt={event.title} />
+          <img
+            src={resolveMediaUrl(event.coverImage)}
+            alt={event.title}
+            loading="lazy"
+            decoding="async"
+          />
           <div className="event-card-badges">
             <span className={`badge ${getEventTypeColor(event.eventType)}`}>
               {event.eventType}

@@ -434,6 +434,8 @@ const AdminPages = ({ defaultPageName = 'home', lockPageSelect = false }) => {
                 <img
                   src={resolveMediaUrl(sectionForm.images.split(',').map((img) => img.trim()).filter(Boolean)[0])}
                   alt="Section Preview"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             )}

@@ -83,6 +83,8 @@ const Gallery = () => {
                       <img 
                         src={resolveMediaUrl(album.coverImage) || '/images/default-album.jpg'} 
                         alt={album.albumName} 
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="album-overlay">
                         <div className="album-info">

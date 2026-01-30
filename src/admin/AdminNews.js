@@ -391,7 +391,12 @@ const AdminNews = () => {
             <input type="file" accept="image/*" className="form-input" onChange={handleImageUpload} />
             {formData.image && (
               <div className="image-preview">
-                <img src={resolveMediaUrl(formData.image)} alt="Preview" />
+                <img
+                  src={resolveMediaUrl(formData.image)}
+                  alt="Preview"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
           </div>

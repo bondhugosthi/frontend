@@ -68,6 +68,8 @@ const Footer = () => {
                       className="logo-image"
                       src={resolveMediaUrl(branding.logo)}
                       alt={branding.websiteName || 'Bondhu Gosthi'}
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     'BG'

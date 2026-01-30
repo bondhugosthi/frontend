@@ -179,7 +179,12 @@ const SocialWork = () => {
                 >
                   {work.coverImage && (
                     <div className="work-card-image">
-                      <img src={resolveMediaUrl(work.coverImage)} alt={work.title} />
+                      <img
+                        src={resolveMediaUrl(work.coverImage)}
+                        alt={work.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
                       <div className="work-card-overlay">
                         <span className="category-badge">
                           {getCategoryIcon(work.category)}

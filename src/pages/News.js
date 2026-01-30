@@ -92,7 +92,12 @@ const News = () => {
                   {item.image && (
                     <Link to={`/news/${item._id}`} className="news-image-link">
                       <div className="news-image">
-                        <img src={resolveMediaUrl(item.image)} alt={item.title} />
+                        <img
+                          src={resolveMediaUrl(item.image)}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                        />
                         {item.isImportant && (
                           <span className="important-badge">
                             <FaStar /> Important

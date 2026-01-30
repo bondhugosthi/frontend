@@ -115,7 +115,12 @@ const Members = () => {
                 >
                   <div className="member-image-container">
                     {member.photo ? (
-                      <img src={resolveMediaUrl(member.photo)} alt={member.name} />
+                      <img
+                        src={resolveMediaUrl(member.photo)}
+                        alt={member.name}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <div className="member-avatar">
                         {member.name.charAt(0).toUpperCase()}

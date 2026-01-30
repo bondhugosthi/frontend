@@ -273,7 +273,13 @@ const AdminEvents = () => {
                   <td>
                     <div className="event-info">
                       {event.coverImage && (
-                        <img src={resolveMediaUrl(event.coverImage)} alt={event.title} className="event-thumb" />
+                        <img
+                          src={resolveMediaUrl(event.coverImage)}
+                          alt={event.title}
+                          className="event-thumb"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       )}
                       <div>
                         <div className="event-title">{event.title}</div>
@@ -503,7 +509,12 @@ const AdminEvents = () => {
             />
             {formData.coverImage && (
               <div className="image-preview">
-                <img src={resolveMediaUrl(formData.coverImage)} alt="Preview" />
+                <img
+                  src={resolveMediaUrl(formData.coverImage)}
+                  alt="Preview"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             )}
           </div>
