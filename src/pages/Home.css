@@ -11,7 +11,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  background-color: var(--brand-teal);
+  background-color: #0b1f26;
 }
 
 .hero-landing {
@@ -52,7 +52,7 @@
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
-  filter: saturate(0.85) brightness(0.7);
+  filter: saturate(0.92) brightness(0.65);
   transform: scale(1.05);
   animation: heroZoom 22s ease-in-out infinite;
 }
@@ -64,7 +64,7 @@
   right: 0;
   bottom: 0;
   z-index: 1;
-  background: linear-gradient(90deg, rgba(var(--brand-teal-rgb), 0.94) 0%, rgba(var(--brand-teal-rgb), 0.82) 42%, rgba(var(--brand-teal-rgb), 0.35) 100%);
+  background: linear-gradient(90deg, rgba(9, 20, 27, 0.95) 0%, rgba(9, 25, 34, 0.82) 42%, rgba(9, 25, 34, 0.38) 100%);
 }
 
 .hero-overlay::before {
