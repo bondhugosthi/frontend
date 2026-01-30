@@ -76,6 +76,22 @@
   box-shadow: 0 10px 30px rgba(var(--brand-teal-rgb), 0.3);
 }
 
+.login-logo .logo-circle.logo-circle-image {
+  background: var(--brand-cream);
+  color: transparent;
+  border: 2px solid rgba(var(--brand-gold-rgb), 0.7);
+  box-shadow: 0 10px 30px rgba(var(--brand-teal-rgb), 0.22);
+}
+
+.login-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+  padding: 0.35rem;
+}
+
 .login-title {
   font-size: 2rem;
   font-weight: 700;
@@ -201,5 +217,9 @@
     width: 70px;
     height: 70px;
     font-size: 1.75rem;
+  }
+
+  .login-logo-image {
+    padding: 0.3rem;
   }
 }

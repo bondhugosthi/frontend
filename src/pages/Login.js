@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import { settingsAPI } from '../utils/api';
+import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Login.css';
 
 const Login = () => {
@@ -13,6 +15,29 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [branding, setBranding] = useState({
+    logo: '',
+    websiteName: 'Bondhu Gosthi'
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    settingsAPI.get()
+      .then((response) => {
+        if (!isMounted) return;
+        const settings = response.data || {};
+        setBranding({
+          logo: settings.logo || '',
+          websiteName: settings.websiteName || 'Bondhu Gosthi'
+        });
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +75,19 @@ const Login = () => {
           {/* Logo & Title */}
           <div className="login-header">
             <div className="login-logo">
-              <div className="logo-circle">BG</div>
+              <div className={`logo-circle ${branding.logo ? 'logo-circle-image' : ''}`}>
+                {branding.logo ? (
+                  <img
+                    src={resolveMediaUrl(branding.logo)}
+                    alt={`${branding.websiteName} logo`}
+                    className="login-logo-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  'BG'
+                )}
+              </div>
             </div>
             <h1 className="login-title">Admin Login</h1>
             <p className="login-subtitle">Bondhu Gosthi Management Portal</p>
