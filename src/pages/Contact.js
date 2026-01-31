@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { contactAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import './Contact.css';
 
 const Contact = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,7 +32,7 @@ const Contact = () => {
 
     try {
       await contactAPI.create(formData);
-      toast.success('Message sent successfully! We will get back to you soon.');
+      toast.success(t('contact.toastSuccess'));
       setFormData({
         name: '',
         email: '',
@@ -40,7 +42,7 @@ const Contact = () => {
         message: ''
       });
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
+      toast.error(error.response?.data?.message || t('contact.toastError'));
     } finally {
       setLoading(false);
     }
@@ -49,19 +51,19 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <FaEnvelope />,
-      title: 'Email',
+      title: t('contact.contactInfo.email'),
       value: 'bondhugosthi2010@gmail.com',
       link: 'mailto:bondhugosthi2010@gmail.com'
     },
     {
       icon: <FaPhone />,
-      title: 'Phone',
+      title: t('contact.contactInfo.phone'),
       value: '+91 6295221588',
       link: 'tel:+916295221588'
     },
     {
       icon: <FaMapMarkerAlt />,
-      title: 'Location',
+      title: t('contact.contactInfo.location'),
       value: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
       link: 'https://www.google.com/maps?q=721454'
     }
@@ -80,10 +82,10 @@ const Contact = () => {
   return (
     <div className="contact-page">
       <PageHeader
-        title="Get In Touch"
-        subtitle="We'd love to hear from you. Send us a message and we'll respond as soon as possible."
-        breadcrumbs={['Home', 'Contact']}
-      />
+      title={t('contact.pageTitle')}
+      subtitle={t('contact.pageSubtitle')}
+      breadcrumbs={[t('nav.home'), t('nav.contact')]}
+    />
 
       <section className="section">
         <div className="container">
@@ -96,15 +98,15 @@ const Contact = () => {
               transition={{ duration: 0.6 }}
             >
               <div className="form-card">
-                <h2 className="form-title">Send Us a Message</h2>
+                <h2 className="form-title">{t('contact.sendMessageTitle')}</h2>
                 <p className="form-subtitle">
-                  Fill out the form below and we'll get back to you as soon as possible.
+                  {t('contact.sendMessageSubtitle')}
                 </p>
 
                 <form onSubmit={handleSubmit} className="contact-form">
                   <div className="form-row">
                     <div className="form-group">
-                      <label htmlFor="name" className="form-label">Full Name *</label>
+                      <label htmlFor="name" className="form-label">{t('contact.fullName')}</label>
                       <input
                         type="text"
                         id="name"
@@ -113,12 +115,12 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        placeholder="John Doe"
+                        placeholder={t('contact.namePlaceholder')}
                       />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="email" className="form-label">Email Address *</label>
+                      <label htmlFor="email" className="form-label">{t('contact.emailAddress')}</label>
                       <input
                         type="email"
                         id="email"
@@ -127,14 +129,14 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        placeholder="john@example.com"
+                        placeholder={t('contact.emailPlaceholder')}
                       />
                     </div>
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label htmlFor="phone" className="form-label">Phone Number</label>
+                      <label htmlFor="phone" className="form-label">{t('contact.phoneNumber')}</label>
                       <input
                         type="tel"
                         id="phone"
@@ -142,12 +144,12 @@ const Contact = () => {
                         className="form-input"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+91 98765 43210"
+                        placeholder={t('contact.phonePlaceholder')}
                       />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="category" className="form-label">Category *</label>
+                      <label htmlFor="category" className="form-label">{t('contact.category')}</label>
                       <select
                         id="category"
                         name="category"
@@ -156,18 +158,18 @@ const Contact = () => {
                         onChange={handleChange}
                         required
                       >
-                        <option value="general">General Inquiry</option>
-                        <option value="event">Event Related</option>
-                        <option value="membership">Membership</option>
-                        <option value="complaint">Complaint</option>
-                        <option value="suggestion">Suggestion</option>
-                        <option value="other">Other</option>
+                        <option value="general">{t('contact.categoryOptions.general')}</option>
+                        <option value="event">{t('contact.categoryOptions.event')}</option>
+                        <option value="membership">{t('contact.categoryOptions.membership')}</option>
+                        <option value="complaint">{t('contact.categoryOptions.complaint')}</option>
+                        <option value="suggestion">{t('contact.categoryOptions.suggestion')}</option>
+                        <option value="other">{t('contact.categoryOptions.other')}</option>
                       </select>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="subject" className="form-label">Subject *</label>
+                    <label htmlFor="subject" className="form-label">{t('contact.subject')}</label>
                     <input
                       type="text"
                       id="subject"
@@ -176,12 +178,12 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      placeholder="What is this regarding?"
+                      placeholder={t('contact.subjectPlaceholder')}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="message" className="form-label">Message *</label>
+                    <label htmlFor="message" className="form-label">{t('contact.message')}</label>
                     <textarea
                       id="message"
                       name="message"
@@ -190,7 +192,7 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      placeholder="Write your message here..."
+                      placeholder={t('contact.messagePlaceholder')}
                     ></textarea>
                   </div>
 
@@ -199,7 +201,7 @@ const Contact = () => {
                     className="btn btn-primary btn-lg btn-block"
                     disabled={loading}
                   >
-                    {loading ? 'Sending...' : 'Send Message'}
+                    {loading ? t('common.sending') : t('common.sendMessage')}
                   </button>
                 </form>
               </div>
@@ -237,8 +239,8 @@ const Contact = () => {
 
               {/* Social Links */}
               <div className="social-section">
-                <h3 className="social-title">Follow Us</h3>
-                <p className="social-subtitle">Stay connected on social media</p>
+                <h3 className="social-title">{t('common.followUs')}</h3>
+                <p className="social-subtitle">{t('common.stayConnected')}</p>
                 <div className="social-links">
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -259,7 +261,7 @@ const Contact = () => {
 
               {/* Map */}
               <div className="map-section">
-                <h3 className="map-title">Find Us</h3>
+                <h3 className="map-title">{t('common.findUs')}</h3>
                 <div className="map-container">
                   <iframe
                     src="https://www.google.com/maps?q=721454&output=embed"

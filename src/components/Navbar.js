@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { settingsAPI } from '../utils/api';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { t, i18n } = useTranslation();
   const getInitialTheme = () => {
     return 'light';
   };
@@ -83,16 +85,33 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/events', label: 'Events' },
-    { path: '/sports', label: 'Sports' },
-    { path: '/social-work', label: 'Social Work' },
-    { path: '/gallery', label: 'Gallery' },
-    { path: '/members', label: 'Members' },
-    { path: '/news', label: 'News' },
-    { path: '/contact', label: 'Contact' }
+    { path: '/', label: t('nav.home') },
+    { path: '/about', label: t('nav.about') },
+    { path: '/events', label: t('nav.events') },
+    { path: '/sports', label: t('nav.sports') },
+    { path: '/social-work', label: t('nav.socialWork') },
+    { path: '/gallery', label: t('nav.gallery') },
+    { path: '/members', label: t('nav.members') },
+    { path: '/news', label: t('nav.news') },
+    { path: '/contact', label: t('nav.contact') }
   ];
+
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'zh', label: '中文(简体)' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'es', label: 'Español' },
+    { code: 'ar', label: 'العربية' },
+    { code: 'fr', label: 'Français' },
+    { code: 'bn', label: 'বাংলা' },
+    { code: 'pt', label: 'Português' },
+    { code: 'ru', label: 'Русский' },
+    { code: 'ur', label: 'اردو' }
+  ];
+
+  const handleLanguageChange = (event) => {
+    i18n.changeLanguage(event.target.value);
+  };
 
   return (
     <nav
@@ -137,9 +156,9 @@ const Navbar = () => {
                   className="theme-toggle"
                   type="button"
                   onClick={handleThemeToggle}
-                  aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                  aria-label={theme === 'dark' ? t('nav.themeLight') : t('nav.themeDark')}
                   aria-pressed={theme === 'dark'}
-                  title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                  title={theme === 'dark' ? t('nav.themeLight') : t('nav.themeDark')}
                 >
                   {theme === 'dark' ? <FaSun /> : <FaMoon />}
                 </button>
@@ -147,6 +166,20 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="navbar-right">
+            <div className="nav-language">
+              <select
+                className="language-select"
+                value={i18n.resolvedLanguage || i18n.language}
+                onChange={handleLanguageChange}
+                aria-label={t('nav.language')}
+              >
+                {languages.map((language) => (
+                  <option key={language.code} value={language.code}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button 
               className={`navbar-toggle ${isOpen ? 'navbar-toggle-open' : ''}`}
               onClick={() => setIsOpen(!isOpen)}

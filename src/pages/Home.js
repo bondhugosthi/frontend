@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaRunning, FaHandsHelping, FaImages, FaArrowRight, FaTrophy, FaUsers, FaHeart } from 'react-icons/fa';
 import Slider from 'react-slick';
+import { useTranslation } from 'react-i18next';
 import { eventsAPI, galleryAPI, newsAPI, sliderImagesAPI, pagesAPI, publicAPI } from '../utils/api';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -10,6 +11,7 @@ import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Home.css';
 
 const Home = () => {
+  const { t } = useTranslation();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [recentGalleries, setRecentGalleries] = useState([]);
   const [latestNews, setLatestNews] = useState([]);
@@ -60,13 +62,13 @@ const Home = () => {
   };
 
   const heroContent = {
-    titleTop: 'Welcome to',
-    titleMain: 'Bondhu Gosthi',
-    subtitle: 'A Family of Friends',
-    description: 'Join us in creating memorable experiences through sports, culture, and community service',
+    titleTop: t('home.hero.titleTop'),
+    titleMain: t('home.hero.titleMain'),
+    subtitle: t('home.hero.subtitle'),
+    description: t('home.hero.description'),
     image: '/images/hero1.jpg',
-    primaryCta: { text: 'Join Our Club', link: '/contact' },
-    secondaryCta: { text: 'About Us', link: '/about' }
+    primaryCta: { text: t('home.hero.primaryCta'), link: '/contact' },
+    secondaryCta: { text: t('home.hero.secondaryCta'), link: '/about' }
   };
 
   const heroSlides = sliderImages.length > 0
@@ -136,26 +138,26 @@ const Home = () => {
   const features = [
     {
       icon: <FaCalendarAlt />,
-      title: 'Cultural Events',
-      description: 'Experience vibrant cultural programs and festivals throughout the year',
+      title: t('home.features.items.cultural.title'),
+      description: t('home.features.items.cultural.description'),
       color: 'feature-blue'
     },
     {
       icon: <FaRunning />,
-      title: 'Sports Tournaments',
-      description: 'Compete in various sports tournaments and showcase your talent',
+      title: t('home.features.items.sports.title'),
+      description: t('home.features.items.sports.description'),
       color: 'feature-green'
     },
     {
       icon: <FaHandsHelping />,
-      title: 'Social Work',
-      description: 'Join our community service initiatives and make a positive impact',
+      title: t('home.features.items.social.title'),
+      description: t('home.features.items.social.description'),
       color: 'feature-orange'
     },
     {
       icon: <FaImages />,
-      title: 'Memorable Moments',
-      description: 'Capture and cherish beautiful memories with our photo galleries',
+      title: t('home.features.items.moments.title'),
+      description: t('home.features.items.moments.description'),
       color: 'feature-purple'
     }
   ];
@@ -171,7 +173,7 @@ const Home = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading home page..." />;
+    return <LoadingSpinner text={t('common.loadingHome')} />;
   }
 
   return (
@@ -232,7 +234,7 @@ const Home = () => {
               </div>
               <div className="stat-content">
                 <h3 className="stat-number">{stats.events}+</h3>
-                <p className="stat-label">Events Organized</p>
+                <p className="stat-label">{t('common.eventsOrganized')}</p>
               </div>
             </motion.div>
 
@@ -246,7 +248,7 @@ const Home = () => {
               </div>
               <div className="stat-content">
                 <h3 className="stat-number">{stats.members}+</h3>
-                <p className="stat-label">Active Members</p>
+                <p className="stat-label">{t('common.activeMembers')}</p>
               </div>
             </motion.div>
 
@@ -260,7 +262,7 @@ const Home = () => {
               </div>
               <div className="stat-content">
                 <h3 className="stat-number">{stats.socialWork}+</h3>
-                <p className="stat-label">Social Initiatives</p>
+                <p className="stat-label">{t('common.socialInitiatives')}</p>
               </div>
             </motion.div>
 
@@ -274,7 +276,7 @@ const Home = () => {
               </div>
               <div className="stat-content">
                 <h3 className="stat-number">{stats.tournaments}+</h3>
-                <p className="stat-label">Tournaments</p>
+                <p className="stat-label">{t('common.tournaments')}</p>
               </div>
             </motion.div>
           </div>
@@ -292,19 +294,12 @@ const Home = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <h2 className="section-title">About Bondhu Gosthi</h2>
-                <p className="section-subtitle">More Than Just a Club - We're a Family</p>
-                <p className="home-about-text">
-                  Bondhu Gosthi is a vibrant community where friendships flourish and memories are made. 
-                  Since our establishment, we've been dedicated to bringing people together through sports, 
-                  cultural events, and meaningful social work.
-                </p>
-                <p className="home-about-text">
-                  Our mission is to create a positive impact in society while fostering brotherhood, 
-                  sportsmanship, and cultural awareness among our members and the community at large.
-                </p>
+                <h2 className="section-title">{t('home.about.title')}</h2>
+                <p className="section-subtitle">{t('home.about.subtitle')}</p>
+                <p className="home-about-text">{t('home.about.text1')}</p>
+                <p className="home-about-text">{t('home.about.text2')}</p>
                 <Link to="/about" className="btn btn-outline">
-                  Learn More About Us <FaArrowRight />
+                  {t('home.about.cta')} <FaArrowRight />
                 </Link>
               </motion.div>
             </div>
@@ -332,8 +327,8 @@ const Home = () => {
       <section className="section features-section">
         <div className="container">
           <div className="section-header text-center">
-            <h2 className="section-title">What We Offer</h2>
-            <p className="section-subtitle">Discover the many ways to be part of our community</p>
+            <h2 className="section-title">{t('home.features.title')}</h2>
+            <p className="section-subtitle">{t('home.features.subtitle')}</p>
           </div>
 
           <div className="features-grid">
@@ -361,11 +356,11 @@ const Home = () => {
         <div className="container">
           <div className="section-header">
             <div>
-              <h2 className="section-title">Upcoming Events</h2>
-              <p className="section-subtitle">Don't miss out on our exciting events</p>
+              <h2 className="section-title">{t('home.events.title')}</h2>
+              <p className="section-subtitle">{t('home.events.subtitle')}</p>
             </div>
             <Link to="/events" className="btn btn-outline">
-              View All Events <FaArrowRight />
+              {t('common.viewAllEvents')} <FaArrowRight />
             </Link>
           </div>
 
@@ -385,7 +380,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="no-data">
-              <p>No upcoming events at the moment. Check back soon!</p>
+              <p>{t('common.noUpcomingEvents')}</p>
             </div>
           )}
         </div>
@@ -396,32 +391,32 @@ const Home = () => {
         <div className="container">
           <div className="gallery-showcase">
             <div className="gallery-copy">
-              <span className="gallery-kicker">Captured Moments</span>
-              <h2 className="gallery-title">Every frame tells our story</h2>
-              <p className="gallery-subtitle">Relive the beautiful memories we've created together</p>
+              <span className="gallery-kicker">{t('home.gallery.kicker')}</span>
+              <h2 className="gallery-title">{t('home.gallery.title')}</h2>
+              <p className="gallery-subtitle">{t('home.gallery.subtitle')}</p>
 
               <div className="gallery-metrics">
                 <div className="gallery-metric">
-                  <span className="gallery-metric-label">Albums</span>
+                  <span className="gallery-metric-label">{t('common.albums')}</span>
                   <span className="gallery-metric-value">{recentGalleries.length}</span>
                 </div>
                 <div className="gallery-metric">
-                  <span className="gallery-metric-label">Photos</span>
+                  <span className="gallery-metric-label">{t('common.photos')}</span>
                   <span className="gallery-metric-value">{totalGalleryPhotos}</span>
                 </div>
                 <div className="gallery-metric">
-                  <span className="gallery-metric-label">Latest</span>
+                  <span className="gallery-metric-label">{t('common.latest')}</span>
                   <span className="gallery-metric-value">{latestGalleryLabel}</span>
                 </div>
               </div>
 
               <div className="gallery-actions">
                 <Link to="/gallery" className="btn btn-primary gallery-btn">
-                  View Full Gallery <FaArrowRight />
+                  {t('common.viewFullGallery')} <FaArrowRight />
                 </Link>
                 {recentGalleries[0]?._id && (
                   <Link to={`/gallery/${recentGalleries[0]._id}`} className="btn btn-outline gallery-btn-outline">
-                    Explore Latest Album
+                    {t('common.exploreLatestAlbum')}
                   </Link>
                 )}
               </div>
@@ -451,11 +446,11 @@ const Home = () => {
                         <div className="gallery-mosaic-overlay">
                           <span className="gallery-mosaic-pill">{(album.category || 'album').replace('_', ' ')}</span>
                           <div className="gallery-mosaic-info">
-                            <h3>{album.albumName}</h3>
-                            <p>{album.media?.length || 0} Photos</p>
-                          </div>
-                        </div>
-                      </Link>
+                    <h3>{album.albumName}</h3>
+                    <p>{album.media?.length || 0} {t('common.photos')}</p>
+                  </div>
+                </div>
+              </Link>
                     </motion.div>
                   ))}
                 </div>
@@ -463,8 +458,8 @@ const Home = () => {
                 <div className="gallery-empty">
                   <div className="gallery-empty-card">
                     <FaImages />
-                    <h3>No albums yet</h3>
-                    <p>Upload your first gallery to start showcasing club memories.</p>
+                    <h3>{t('common.noAlbums')}</h3>
+                    <p>{t('common.uploadFirstGallery')}</p>
                   </div>
                 </div>
               )}
@@ -479,11 +474,11 @@ const Home = () => {
           <div className="container">
             <div className="section-header">
               <div>
-                <h2 className="section-title">Latest News</h2>
-                <p className="section-subtitle">Stay updated with our recent announcements</p>
+                <h2 className="section-title">{t('home.news.title')}</h2>
+                <p className="section-subtitle">{t('home.news.subtitle')}</p>
               </div>
               <Link to="/news" className="btn btn-outline">
-                View All News <FaArrowRight />
+                {t('common.viewAllNews')} <FaArrowRight />
               </Link>
             </div>
 
@@ -520,7 +515,7 @@ const Home = () => {
                       {(news.content || '').substring(0, 100)}...
                     </p>
                     <Link to={`/news/${news._id}`} className="news-card-link">
-                      Read More <FaArrowRight />
+                      {t('common.readMore')} <FaArrowRight />
                     </Link>
                   </div>
                 </motion.div>
@@ -540,12 +535,12 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="cta-title">Join Our Community</h2>
+            <h2 className="cta-title">{t('home.cta.title')}</h2>
             <p className="cta-description">
-              Be part of something bigger. Connect with like-minded individuals and make a difference.
+              {t('home.cta.description')}
             </p>
             <Link to="/contact" className="btn btn-primary btn-lg">
-              Get in Touch <FaArrowRight />
+              {t('home.cta.button')} <FaArrowRight />
             </Link>
           </motion.div>
         </div>

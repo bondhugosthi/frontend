@@ -22,12 +22,14 @@ import {
   FaSignOutAlt,
   FaHome
 } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { settingsAPI } from '../utils/api';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
+  const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,26 +66,26 @@ const AdminLayout = () => {
   };
 
   const menuItems = [
-    { path: '/admin', label: 'Dashboard', icon: <FaTachometerAlt />, exact: true },
-    { path: '/admin/events', label: 'Events', icon: <FaCalendarAlt /> },
-    { path: '/admin/sports', label: 'Sports', icon: <FaRunning /> },
-    { path: '/admin/social-work', label: 'Social Work', icon: <FaHandsHelping /> },
-    { path: '/admin/gallery', label: 'Gallery', icon: <FaImages /> },
-    { path: '/admin/slider-images', label: 'Slider Images', icon: <FaImages /> },
-    { path: '/admin/members', label: 'Members', icon: <FaUsers /> },
-    { path: '/admin/news', label: 'News', icon: <FaNewspaper /> },
-    { path: '/admin/contact', label: 'Contact', icon: <FaEnvelope /> },
-    { path: '/admin/pages', label: 'Pages', icon: <FaFileAlt /> },
-    { path: '/admin/home-edit', label: 'Home Edit', icon: <FaHome /> },
-    { path: '/admin/about-edit', label: 'About Edit', icon: <FaFileAlt /> },
-    { path: '/admin/contact-edit', label: 'Contact Edit', icon: <FaEnvelope /> },
-    { path: '/admin/footer-edit', label: 'Footer Edit', icon: <FaFileAlt /> },
-    { path: '/admin/settings', label: 'Settings', icon: <FaCog /> },
-    { path: '/admin/seo', label: 'SEO', icon: <FaSearch /> },
-    { path: '/admin/users', label: 'Users & Roles', icon: <FaUserShield /> },
-    { path: '/admin/backups', label: 'Backups', icon: <FaDatabase /> },
-    { path: '/admin/security', label: 'Security', icon: <FaShieldAlt /> },
-    { path: '/admin/activity-logs', label: 'Activity Logs', icon: <FaHistory /> }
+    { path: '/admin', label: t('admin.dashboard'), icon: <FaTachometerAlt />, exact: true },
+    { path: '/admin/events', label: t('admin.events'), icon: <FaCalendarAlt /> },
+    { path: '/admin/sports', label: t('admin.sports'), icon: <FaRunning /> },
+    { path: '/admin/social-work', label: t('admin.socialWork'), icon: <FaHandsHelping /> },
+    { path: '/admin/gallery', label: t('admin.gallery'), icon: <FaImages /> },
+    { path: '/admin/slider-images', label: t('admin.sliderImages'), icon: <FaImages /> },
+    { path: '/admin/members', label: t('admin.members'), icon: <FaUsers /> },
+    { path: '/admin/news', label: t('admin.news'), icon: <FaNewspaper /> },
+    { path: '/admin/contact', label: t('admin.contact'), icon: <FaEnvelope /> },
+    { path: '/admin/pages', label: t('admin.pages'), icon: <FaFileAlt /> },
+    { path: '/admin/home-edit', label: t('admin.homeEdit'), icon: <FaHome /> },
+    { path: '/admin/about-edit', label: t('admin.aboutEdit'), icon: <FaFileAlt /> },
+    { path: '/admin/contact-edit', label: t('admin.contactEdit'), icon: <FaEnvelope /> },
+    { path: '/admin/footer-edit', label: t('admin.footerEdit'), icon: <FaFileAlt /> },
+    { path: '/admin/settings', label: t('admin.settings'), icon: <FaCog /> },
+    { path: '/admin/seo', label: t('admin.seo'), icon: <FaSearch /> },
+    { path: '/admin/users', label: t('admin.usersRoles'), icon: <FaUserShield /> },
+    { path: '/admin/backups', label: t('admin.backups'), icon: <FaDatabase /> },
+    { path: '/admin/security', label: t('admin.security'), icon: <FaShieldAlt /> },
+    { path: '/admin/activity-logs', label: t('admin.activityLogs'), icon: <FaHistory /> }
   ];
 
   const isActive = (path, exact) => {
@@ -115,7 +117,7 @@ const AdminLayout = () => {
             {sidebarOpen && (
               <div className="logo-text">
                 <span className="logo-main">{branding.websiteName || 'Bondhu Gosthi'}</span>
-                <span className="logo-sub">Admin Panel</span>
+                <span className="logo-sub">{t('admin.adminPanel')}</span>
               </div>
             )}
           </div>
@@ -136,13 +138,13 @@ const AdminLayout = () => {
         </nav>
 
         <div className="sidebar-footer">
-          <Link to="/" className="nav-item" title="View Website">
+          <Link to="/" className="nav-item" title={t('admin.viewWebsite')}>
             <span className="nav-icon"><FaHome /></span>
-            {sidebarOpen && <span className="nav-label">View Website</span>}
+            {sidebarOpen && <span className="nav-label">{t('admin.viewWebsite')}</span>}
           </Link>
-          <button onClick={handleLogout} className="nav-item logout-btn" title="Logout">
+          <button onClick={handleLogout} className="nav-item logout-btn" title={t('admin.logout')}>
             <span className="nav-icon"><FaSignOutAlt /></span>
-            {sidebarOpen && <span className="nav-label">Logout</span>}
+            {sidebarOpen && <span className="nav-label">{t('admin.logout')}</span>}
           </button>
         </div>
       </aside>

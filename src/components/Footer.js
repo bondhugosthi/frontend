@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebook, FaInstagram, FaYoutube, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart, FaLock } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { settingsAPI } from '../utils/api';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showLoginHint, setShowLoginHint] = useState(false);
   const [branding, setBranding] = useState({
@@ -16,17 +18,17 @@ const Footer = () => {
   const [istTime, setIstTime] = useState(() => new Date());
 
   const quickLinks = [
-    { path: '/about', label: 'About Us' },
-    { path: '/events', label: 'Events' },
-    { path: '/sports', label: 'Sports' },
-    { path: '/social-work', label: 'Social Work' }
+    { path: '/about', label: t('nav.about') },
+    { path: '/events', label: t('nav.events') },
+    { path: '/sports', label: t('nav.sports') },
+    { path: '/social-work', label: t('nav.socialWork') }
   ];
 
   const importantLinks = [
-    { path: '/gallery', label: 'Gallery' },
-    { path: '/members', label: 'Members' },
-    { path: '/news', label: 'News' },
-    { path: '/contact', label: 'Contact' }
+    { path: '/gallery', label: t('nav.gallery') },
+    { path: '/members', label: t('nav.members') },
+    { path: '/news', label: t('nav.news') },
+    { path: '/contact', label: t('nav.contact') }
   ];
 
   const handleLoginClick = () => {
@@ -109,11 +111,11 @@ const Footer = () => {
                 </div>
                 <div className="logo-text">
                   <span className="logo-main">{branding.websiteName || 'Bondhu Gosthi'}</span>
-                  <span className="logo-tagline">{branding.tagline || 'A Family of Friends'}</span>
+                  <span className="logo-tagline">{branding.tagline || t('footer.taglineFallback')}</span>
                 </div>
               </div>
               <p className="footer-description">
-                Bondhu Gosthi is more than just a club - it's a family dedicated to bringing people together through sports, cultural events, and community service. Join us in making a difference!
+                {t('footer.description')}
               </p>
               <div className="footer-social">
                 <a href="https://www.facebook.com/people/Bondhu-Gosthi/61582556837398/?rdid=E4gdSHsB06Cqk1qW&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1ScUAv9WJ2%2F" target="_blank" rel="noopener noreferrer" className="social-link">
@@ -130,7 +132,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div className="footer-section">
-              <h3 className="footer-title">Quick Links</h3>
+              <h3 className="footer-title">{t('footer.quickLinks')}</h3>
               <ul className="footer-links">
                 {quickLinks.map((link) => (
                   <li key={link.path}>
@@ -144,7 +146,7 @@ const Footer = () => {
 
             {/* Important Links */}
             <div className="footer-section">
-              <h3 className="footer-title">Important Links</h3>
+              <h3 className="footer-title">{t('footer.importantLinks')}</h3>
               <ul className="footer-links">
                 {importantLinks.map((link) => (
                   <li key={link.path}>
@@ -158,7 +160,7 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="footer-section">
-              <h3 className="footer-title">Get In Touch</h3>
+              <h3 className="footer-title">{t('footer.getInTouch')}</h3>
               <ul className="footer-contact">
                 <li>
                   <FaEnvelope className="contact-icon" />
@@ -183,7 +185,8 @@ const Footer = () => {
         <div className="container">
           <div className="footer-bottom-content">
             <p className="copyright">
-              Copyright {new Date().getFullYear()} Bondhu Gosthi. Made with <FaHeart className="heart-icon" /> by Our Team
+              {t('footer.copyright', { year: new Date().getFullYear() })}{' '}
+              {t('footer.madeWith')} <FaHeart className="heart-icon" /> {t('footer.byTeam')}
             </p>
 
             <div className="footer-live-time" aria-live="polite">
@@ -196,10 +199,10 @@ const Footer = () => {
               onClick={handleLoginClick}
               onMouseEnter={() => setShowLoginHint(true)}
               onMouseLeave={() => setShowLoginHint(false)}
-              title="Admin Login"
+              title={t('footer.adminLogin')}
             >
               <FaLock />
-              {showLoginHint && <span className="login-hint">Admin Login</span>}
+              {showLoginHint && <span className="login-hint">{t('footer.adminLogin')}</span>}
             </button>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import { settingsAPI } from '../utils/api';
@@ -9,6 +10,7 @@ import { resolveMediaUrl } from '../utils/mediaUrl';
 import './Login.css';
 
 const Login = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -47,13 +49,13 @@ const Login = () => {
       const result = await login(email, password);
       
       if (result.success) {
-        toast.success('Login successful! Welcome back.');
+        toast.success(t('login.success', { defaultValue: 'Login successful! Welcome back.' }));
         navigate('/admin');
       } else {
-        toast.error(result.message || 'Invalid credentials. Please try again.');
+        toast.error(result.message || t('login.invalid', { defaultValue: 'Invalid credentials. Please try again.' }));
       }
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
+      toast.error(t('login.error', { defaultValue: 'An error occurred. Please try again.' }));
     } finally {
       setLoading(false);
     }
@@ -89,21 +91,21 @@ const Login = () => {
                 )}
               </div>
             </div>
-            <h1 className="login-title">Admin Login</h1>
-            <p className="login-subtitle">Bondhu Gosthi Management Portal</p>
+            <h1 className="login-title">{t('login.title')}</h1>
+            <p className="login-subtitle">{t('login.subtitle')}</p>
           </div>
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
               <label htmlFor="email" className="form-label">
-                <FaEnvelope /> Email Address
+                <FaEnvelope /> {t('login.emailLabel')}
               </label>
               <input
                 type="email"
                 id="email"
                 className="form-input"
-                placeholder="Enter your email"
+                placeholder={t('login.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -113,14 +115,14 @@ const Login = () => {
 
             <div className="form-group">
               <label htmlFor="password" className="form-label">
-                <FaLock /> Password
+                <FaLock /> {t('login.passwordLabel')}
               </label>
               <div className="password-input-container">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   className="form-input"
-                  placeholder="Enter your password"
+                  placeholder={t('login.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -130,7 +132,7 @@ const Login = () => {
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label="Toggle password visibility"
+                  aria-label={t('login.togglePassword', { defaultValue: 'Toggle password visibility' })}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -145,10 +147,10 @@ const Login = () => {
               {loading ? (
                 <>
                   <span className="spinner-small"></span>
-                  Logging in...
+                  {t('login.loggingIn', { defaultValue: 'Logging in...' })}
                 </>
               ) : (
-                'Login'
+                t('login.loginButton')
               )}
             </button>
           </form>
@@ -156,14 +158,14 @@ const Login = () => {
           {/* Info */}
           <div className="login-info">
             <p className="info-text">
-              <FaLock /> This is a secure admin portal. Only authorized personnel can access.
+              <FaLock /> {t('login.secureNote', { defaultValue: 'This is a secure admin portal. Only authorized personnel can access.' })}
             </p>
           </div>
 
           {/* Back to Home */}
           <div className="login-footer">
             <a href="/" className="back-home-link">
-              <FaArrowLeft /> Back to Home
+              <FaArrowLeft /> {t('notFound.backHome')}
             </a>
           </div>
         </motion.div>
