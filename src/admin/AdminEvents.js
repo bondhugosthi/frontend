@@ -107,11 +107,16 @@ const AdminEvents = () => {
         return;
       }
 
+      const payload = {
+        ...formData,
+        coverImage: formData.coverImage || undefined
+      };
+
       if (editingEvent) {
-        await eventsAPI.update(editingEvent._id, formData);
+        await eventsAPI.update(editingEvent._id, payload);
         toast.success('Event updated successfully');
       } else {
-        await eventsAPI.create(formData);
+        await eventsAPI.create(payload);
         toast.success('Event created successfully');
       }
       
