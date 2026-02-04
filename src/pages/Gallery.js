@@ -12,6 +12,16 @@ const Gallery = () => {
   const [galleries, setGalleries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const placeholderImage = '/images/gallery-placeholder.svg';
+
+  const getAlbumCoverSrc = (album) => {
+    const candidate =
+      album?.coverImage ||
+      album?.media?.[0]?.thumbnail ||
+      album?.media?.[0]?.url ||
+      placeholderImage;
+    return resolveMediaUrl(candidate) || placeholderImage;
+  };
 
   const fetchGalleries = useCallback(async () => {
     setLoading(true);
@@ -81,7 +91,7 @@ const Gallery = () => {
                   <Link to={`/gallery/${album._id}`} className="gallery-album-card">
                     <div className="album-image-container">
                       <img 
-                        src={resolveMediaUrl(album.coverImage) || '/images/default-album.jpg'} 
+                        src={getAlbumCoverSrc(album)} 
                         alt={album.albumName} 
                         loading="lazy"
                         decoding="async"

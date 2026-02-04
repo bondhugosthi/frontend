@@ -24,6 +24,16 @@ const Home = () => {
     socialWork: 0,
     tournaments: 0
   });
+  const galleryPlaceholder = '/images/gallery-placeholder.svg';
+
+  const getGalleryCoverSrc = (album) => {
+    const candidate =
+      album?.coverImage ||
+      album?.media?.[0]?.thumbnail ||
+      album?.media?.[0]?.url ||
+      galleryPlaceholder;
+    return resolveMediaUrl(candidate) || galleryPlaceholder;
+  };
 
   useEffect(() => {
     fetchHomeData();
@@ -437,7 +447,7 @@ const Home = () => {
                       <Link to={`/gallery/${album._id}`} className="gallery-mosaic-link">
                         <div className="gallery-mosaic-image">
                           <img
-                            src={resolveMediaUrl(album.coverImage)}
+                            src={getGalleryCoverSrc(album)}
                             alt={album.albumName}
                             loading="lazy"
                             decoding="async"
