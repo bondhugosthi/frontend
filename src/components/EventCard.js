@@ -6,6 +6,17 @@ import { resolveMediaUrl } from '../utils/mediaUrl';
 import './EventCard.css';
 
 const EventCard = ({ event }) => {
+  const placeholderImage = '/images/event-placeholder.svg';
+
+  const getCoverSrc = () => {
+    const candidate =
+      event?.coverImage ||
+      event?.gallery?.[0]?.url ||
+      event?.images?.[0] ||
+      placeholderImage;
+    return resolveMediaUrl(candidate) || placeholderImage;
+  };
+
   const getEventTypeColor = (type) => {
     const colors = {
       tournament: 'badge-primary',
@@ -29,24 +40,22 @@ const EventCard = ({ event }) => {
 
   return (
     <div className="event-card">
-      {event.coverImage && (
-        <div className="event-card-image">
-          <img
-            src={resolveMediaUrl(event.coverImage)}
-            alt={event.title}
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="event-card-badges">
-            <span className={`badge ${getEventTypeColor(event.eventType)}`}>
-              {event.eventType}
-            </span>
-            <span className={`badge ${getStatusColor(event.status)}`}>
-              {event.status}
-            </span>
-          </div>
+      <div className="event-card-image">
+        <img
+          src={getCoverSrc()}
+          alt={event.title}
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="event-card-badges">
+          <span className={`badge ${getEventTypeColor(event.eventType)}`}>
+            {event.eventType}
+          </span>
+          <span className={`badge ${getStatusColor(event.status)}`}>
+            {event.status}
+          </span>
         </div>
-      )}
+      </div>
       
       <div className="event-card-content">
         <h3 className="event-card-title">{event.title}</h3>

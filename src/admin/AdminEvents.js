@@ -17,6 +17,16 @@ const AdminEvents = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
+  const placeholderImage = '/images/event-placeholder.svg';
+
+  const getEventCoverSrc = (event) => {
+    const candidate =
+      event?.coverImage ||
+      event?.gallery?.[0]?.url ||
+      event?.images?.[0] ||
+      placeholderImage;
+    return resolveMediaUrl(candidate) || placeholderImage;
+  };
 
   const [formData, setFormData] = useState({
     title: '',
@@ -272,15 +282,13 @@ const AdminEvents = () => {
                 >
                   <td>
                     <div className="event-info">
-                      {event.coverImage && (
-                        <img
-                          src={resolveMediaUrl(event.coverImage)}
-                          alt={event.title}
-                          className="event-thumb"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      )}
+                      <img
+                        src={getEventCoverSrc(event)}
+                        alt={event.title}
+                        className="event-thumb"
+                        loading="lazy"
+                        decoding="async"
+                      />
                       <div>
                         <div className="event-title">{event.title}</div>
                         <div className="event-desc">

@@ -51,10 +51,21 @@ const EventDetails = () => {
     return colors[status] || 'status-upcoming';
   };
 
+  const placeholderImage = '/images/event-placeholder.svg';
+  const galleryItems = Array.isArray(event.gallery) && event.gallery.length > 0
+    ? event.gallery
+    : Array.isArray(event.images)
+      ? event.images.filter(Boolean).map((url) => ({ url }))
+      : [];
+
+  const heroImage = resolveMediaUrl(
+    event.coverImage || galleryItems[0]?.url || placeholderImage
+  ) || placeholderImage;
+
   return (
     <div className="event-details-page">
       {/* Hero Section */}
-      <div className="event-hero" style={{ backgroundImage: `url(${resolveMediaUrl(event.coverImage)})` }}>
+      <div className="event-hero" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="event-hero-overlay"></div>
         <div className="container">
           <div className="event-hero-content">
@@ -115,11 +126,11 @@ const EventDetails = () => {
               </div>
 
               {/* Gallery */}
-              {event.gallery && event.gallery.length > 0 && (
+              {galleryItems.length > 0 && (
                 <div className="content-card">
                   <h2 className="content-title">Event Gallery</h2>
                   <div className="event-gallery-grid">
-                    {event.gallery.map((image, index) => (
+                    {galleryItems.map((image, index) => (
                       <motion.div
                         key={index}
                         className="gallery-item"
@@ -128,7 +139,7 @@ const EventDetails = () => {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
                         <img
-                          src={resolveMediaUrl(image.url)}
+                          src={resolveMediaUrl(image.url || placeholderImage) || placeholderImage}
                           alt={image.caption || `Gallery ${index + 1}`}
                           loading="lazy"
                           decoding="async"
