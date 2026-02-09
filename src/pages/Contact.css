@@ -173,7 +173,9 @@
 
 .map-card {
   display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
   gap: 1.25rem;
+  align-items: start;
 }
 
 .map-container {
@@ -235,6 +237,10 @@
   }
 
   .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .map-card {
     grid-template-columns: 1fr;
   }
 }
