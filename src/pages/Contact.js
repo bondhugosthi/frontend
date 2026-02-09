@@ -266,57 +266,63 @@ const Contact = () => {
                   ))}
                 </div>
               </div>
-
-              {/* Map */}
-              <div className="map-section">
-                <div className="map-header">
-                  <h3 className="map-title">{t('common.findUs')}</h3>
-                  <p className="map-subtitle">
-                    Visit our clubhouse in Purba Mednipur or use Google Maps to plan your route.
-                  </p>
-                </div>
-                <div className="map-card">
-                  <div className="map-container">
-                    <iframe
-                      src="https://www.google.com/maps?q=721454&output=embed"
-                      width="100%"
-                      height="300"
-                      style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
-                      allowFullScreen=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Bondhu Gosthi Location"
-                    ></iframe>
-                  </div>
-                  <div className="map-image-card">
-                    <span className="map-badge">Google Map</span>
-                    <img
-                      src="/images/Gmap.png"
-                      alt="Bondhu Gosthi location map"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <p className="map-caption">
-                      Scan the QR code to open directions on your phone.
-                    </p>
-                  </div>
-                </div>
-                <div className="map-actions">
-                  <a
-                    href={contactDetails.mapLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary"
-                  >
-                    Get Directions
-                  </a>
-                  <a href={contactDetails.phoneLink} className="btn btn-outline">
-                    Call Us
-                  </a>
-                </div>
-              </div>
             </motion.div>
           </div>
+
+          {/* Map */}
+          <motion.div
+            className="map-section map-section-wide"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="map-header">
+              <h3 className="map-title">{t('common.findUs')}</h3>
+              <p className="map-subtitle">
+                Visit our clubhouse in Purba Mednipur or use Google Maps to plan your route.
+              </p>
+            </div>
+            <div className="map-card">
+              <div className="map-container">
+                <iframe
+                  src="https://www.google.com/maps?q=721454&output=embed"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Bondhu Gosthi Location"
+                ></iframe>
+              </div>
+              <div className="map-image-card">
+                <span className="map-badge">Google Map</span>
+                <img
+                  src="/images/Gmap.png"
+                  alt="Bondhu Gosthi location map"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <p className="map-caption">
+                  Scan the QR code to open directions on your phone.
+                </p>
+              </div>
+            </div>
+            <div className="map-actions">
+              <a
+                href={contactDetails.mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                Get Directions
+              </a>
+              <a href={contactDetails.phoneLink} className="btn btn-outline">
+                Call Us
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>
