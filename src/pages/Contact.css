@@ -154,13 +154,26 @@
   padding: 2.5rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .map-title {
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
   color: var(--text-primary);
+}
+
+.map-subtitle {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 0.35rem;
+}
+
+.map-card {
+  display: grid;
+  gap: 1.25rem;
 }
 
 .map-container {
@@ -169,17 +182,50 @@
   box-shadow: var(--shadow-md);
 }
 
-.map-image {
-  margin-top: 1.5rem;
+.map-image-card {
+  position: relative;
+  background: var(--bg-secondary);
+  padding: 1rem;
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  border: 1px solid var(--card-border);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
-.map-image img {
+.map-image-card img {
   width: 100%;
   height: auto;
   display: block;
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.map-badge {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--brand-teal-rgb), 0.9);
+  color: var(--brand-cream);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(var(--brand-teal-rgb), 0.25);
+}
+
+.map-caption {
+  margin-top: 0.85rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 /* Responsive Design */
@@ -202,5 +248,10 @@
 
   .social-links {
     grid-template-columns: 1fr;
+  }
+
+  .map-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

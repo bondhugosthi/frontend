@@ -48,24 +48,32 @@ const Contact = () => {
     }
   };
 
+  const contactDetails = {
+    email: 'bondhugosthi2010@gmail.com',
+    phoneDisplay: '+91 6295221588',
+    phoneLink: 'tel:+916295221588',
+    location: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
+    mapLink: 'https://www.google.com/maps?q=721454'
+  };
+
   const contactInfo = [
     {
       icon: <FaEnvelope />,
       title: t('contact.contactInfo.email'),
-      value: 'bondhugosthi2010@gmail.com',
-      link: 'mailto:bondhugosthi2010@gmail.com'
+      value: contactDetails.email,
+      link: `mailto:${contactDetails.email}`
     },
     {
       icon: <FaPhone />,
       title: t('contact.contactInfo.phone'),
-      value: '+91 6295221588',
-      link: 'tel:+916295221588'
+      value: contactDetails.phoneDisplay,
+      link: contactDetails.phoneLink
     },
     {
       icon: <FaMapMarkerAlt />,
       title: t('contact.contactInfo.location'),
-      value: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
-      link: 'https://www.google.com/maps?q=721454'
+      value: contactDetails.location,
+      link: contactDetails.mapLink
     }
   ];
 
@@ -261,26 +269,50 @@ const Contact = () => {
 
               {/* Map */}
               <div className="map-section">
-                <h3 className="map-title">{t('common.findUs')}</h3>
-                <div className="map-container">
-                  <iframe
-                    src="https://www.google.com/maps?q=721454&output=embed"
-                    width="100%"
-                    height="300"
-                    style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Bondhu Gosthi Location"
-                  ></iframe>
+                <div className="map-header">
+                  <h3 className="map-title">{t('common.findUs')}</h3>
+                  <p className="map-subtitle">
+                    Visit our clubhouse in Purba Mednipur or use Google Maps to plan your route.
+                  </p>
                 </div>
-                <div className="map-image">
-                  <img
-                    src="/images/Gmap.png"
-                    alt="Bondhu Gosthi location map"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="map-card">
+                  <div className="map-container">
+                    <iframe
+                      src="https://www.google.com/maps?q=721454&output=embed"
+                      width="100%"
+                      height="300"
+                      style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Bondhu Gosthi Location"
+                    ></iframe>
+                  </div>
+                  <div className="map-image-card">
+                    <span className="map-badge">Google Map</span>
+                    <img
+                      src="/images/Gmap.png"
+                      alt="Bondhu Gosthi location map"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <p className="map-caption">
+                      Scan the QR code to open directions on your phone.
+                    </p>
+                  </div>
+                </div>
+                <div className="map-actions">
+                  <a
+                    href={contactDetails.mapLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    Get Directions
+                  </a>
+                  <a href={contactDetails.phoneLink} className="btn btn-outline">
+                    Call Us
+                  </a>
                 </div>
               </div>
             </motion.div>
