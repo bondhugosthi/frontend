@@ -182,6 +182,24 @@ const Home = () => {
     return badges[type] || 'badge-secondary';
   };
 
+  const mapDetails = [
+    {
+      label: t('contact.contactInfo.location'),
+      value: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India',
+      wide: true
+    },
+    {
+      label: t('contact.contactInfo.phone'),
+      value: '+91 6295221588'
+    },
+    {
+      label: t('contact.contactInfo.email'),
+      value: 'bondhugosthi2010@gmail.com'
+    }
+  ];
+
+  const mapLink = 'https://www.google.com/maps?q=721454';
+
   if (loading) {
     return <LoadingSpinner text={t('common.loadingHome')} />;
   }
@@ -559,13 +577,65 @@ const Home = () => {
       {/* Map Image Section */}
       <section className="section home-map-section">
         <div className="container">
-          <div className="home-map-card">
-            <img
-              src="/images/Gmap.png"
-              alt="Bondhu Gosthi map"
-              loading="lazy"
-              decoding="async"
-            />
+          <div className="home-map-grid">
+            <motion.div
+              className="home-map-content"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <span className="home-map-kicker">{t('common.findUs')}</span>
+              <h2 className="home-map-title">Visit Bondhu Gosthi Club</h2>
+              <p className="home-map-subtitle">
+                We're located in Purba Mednipur, West Bengal. Drop by for tournaments,
+                cultural programs, and community initiatives throughout the year.
+              </p>
+
+              <div className="home-map-details">
+                {mapDetails.map((detail) => (
+                  <div
+                    key={detail.label}
+                    className={`home-map-detail${detail.wide ? ' home-map-detail-wide' : ''}`}
+                  >
+                    <span className="home-map-detail-label">{detail.label}</span>
+                    <span className="home-map-detail-value">{detail.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="home-map-actions">
+                <a
+                  href={mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  Get Directions
+                </a>
+                <Link to="/contact" className="btn btn-outline">
+                  {t('common.getInTouch')}
+                </Link>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="home-map-visual"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="home-map-card">
+                <span className="home-map-badge">Google Map</span>
+                <img
+                  src="/images/Gmap.png"
+                  alt="Bondhu Gosthi location map"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
