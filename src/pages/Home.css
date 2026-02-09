@@ -1563,6 +1563,25 @@
   margin-right: auto;
 }
 
+/* Home Map Image */
+.home-map-section {
+  padding-top: var(--spacing-lg);
+}
+
+.home-map-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.home-map-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Section Utilities */
 .section-title {
   font-size: 2.5rem;

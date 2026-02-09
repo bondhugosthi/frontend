@@ -555,6 +555,20 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Map Image Section */}
+      <section className="section home-map-section">
+        <div className="container">
+          <div className="home-map-card">
+            <img
+              src="/images/Gmap.png"
+              alt="Bondhu Gosthi map"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

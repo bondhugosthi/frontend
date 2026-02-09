@@ -274,6 +274,14 @@ const Contact = () => {
                     title="Bondhu Gosthi Location"
                   ></iframe>
                 </div>
+                <div className="map-image">
+                  <img
+                    src="/images/Gmap.png"
+                    alt="Bondhu Gosthi location map"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
