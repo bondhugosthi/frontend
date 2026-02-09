@@ -1261,3 +1261,4 @@ i18n.on('languageChanged', (language) => {
 });
 
 export default i18n;
+
