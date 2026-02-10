@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { pagesAPI, settingsAPI } from './api';
 
 const ensureMetaTag = (attr, key, content) => {
@@ -48,6 +48,13 @@ export const applySeo = ({ title, description, keywords, ogImage } = {}) => {
 };
 
 const usePageSeo = ({ pageName, title, description, keywords, ogImage } = {}) => {
+  const keywordsKey = useMemo(() => {
+    if (Array.isArray(keywords)) {
+      return keywords.join(',');
+    }
+    return keywords || '';
+  }, [keywords]);
+
   useEffect(() => {
     if (!pageName) return;
     let isMounted = true;
@@ -82,7 +89,7 @@ const usePageSeo = ({ pageName, title, description, keywords, ogImage } = {}) =>
     return () => {
       isMounted = false;
     };
-  }, [pageName, title, description, ogImage, Array.isArray(keywords) ? keywords.join(',') : keywords]);
+  }, [pageName, title, description, ogImage, keywordsKey]);
 };
 
 export default usePageSeo;
