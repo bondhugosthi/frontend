@@ -21,7 +21,12 @@ const Footer = () => {
     { path: '/about', label: t('nav.about') },
     { path: '/events', label: t('nav.events') },
     { path: '/sports', label: t('nav.sports') },
-    { path: '/social-work', label: t('nav.socialWork') }
+    { path: '/social-work', label: t('nav.socialWork') },
+    {
+      path: 'https://bondhugosthi-ganpati-puja-sports.blogspot.com/',
+      label: 'Blog',
+      external: true
+    }
   ];
 
   const importantLinks = [
@@ -136,9 +141,20 @@ const Footer = () => {
               <ul className="footer-links">
                 {quickLinks.map((link) => (
                   <li key={link.path}>
-                    <Link to={link.path} className="footer-link">
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="footer-link"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link to={link.path} className="footer-link">
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

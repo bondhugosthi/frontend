@@ -288,8 +288,8 @@ const Contact = () => {
                 <iframe
                   src="https://www.google.com/maps?q=721454&output=embed"
                   width="100%"
-                  height="300"
-                  style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
+                  height="100%"
+                  style={{ border: 0, borderRadius: 'var(--radius-lg)', height: '100%' }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
