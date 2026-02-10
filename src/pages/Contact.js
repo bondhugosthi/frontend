@@ -16,7 +16,8 @@ const Contact = () => {
       email: 'bondhugosthi2010@gmail.com',
       phone: '+91 6295221588',
       address: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
-      mapLink: 'https://www.google.com/maps?q=721454'
+      mapLink: 'https://www.google.com/maps?q=721454',
+      mapEmbedLink: ''
     },
     businessHours: [],
     brochureUrl: '',
@@ -46,7 +47,8 @@ const Contact = () => {
             email: settings.contactDetails?.email || 'bondhugosthi2010@gmail.com',
             phone: settings.contactDetails?.phone || '+91 6295221588',
             address: settings.contactDetails?.address || 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
-            mapLink: settings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454'
+            mapLink: settings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454',
+            mapEmbedLink: settings.contactDetails?.mapEmbedLink || ''
           },
           businessHours: settings.businessHours || [],
           brochureUrl: settings.brochureUrl || '',
@@ -94,11 +96,17 @@ const Contact = () => {
     phoneDisplay: siteSettings.contactDetails?.phone || '+91 6295221588',
     phoneLink: `tel:${(siteSettings.contactDetails?.phone || '+916295221588').replace(/\s+/g, '')}`,
     location: siteSettings.contactDetails?.address || 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
-    mapLink: siteSettings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454'
+    mapLink: siteSettings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454',
+    mapEmbedLink: siteSettings.contactDetails?.mapEmbedLink || ''
   };
 
   const mapEmbedUrl = (() => {
     const normalizeHttps = (value) => (value ? value.replace(/^http:\/\//i, 'https://') : '');
+    const embedLink = normalizeHttps(contactDetails.mapEmbedLink || '');
+    if (embedLink) {
+      return embedLink;
+    }
+
     const link = normalizeHttps(contactDetails.mapLink || '');
     if (link.includes('google.com/maps/embed')) {
       return link;
@@ -109,8 +117,9 @@ const Contact = () => {
       }
       return link.includes('?') ? `${link}&output=embed` : `${link}?output=embed`;
     }
+
     const query = encodeURIComponent(contactDetails.location || 'Dulalpur, Egra, West Bengal 721454');
-    return `https://www.google.com/maps?q=${query}&output=embed`;
+    return `https://maps.google.com/maps?q=${query}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
   })();
 
   const businessHours = Array.isArray(siteSettings.businessHours)

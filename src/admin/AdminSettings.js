@@ -33,6 +33,7 @@ const defaultForm = {
   contactPhone: '',
   contactAddress: '',
   mapLink: '',
+  mapEmbedLink: '',
   brochureUrl: '',
   brochureLabel: '',
   ctaTitle: '',
@@ -75,6 +76,7 @@ const AdminSettings = () => {
         contactPhone: settings.contactDetails?.phone || '',
         contactAddress: settings.contactDetails?.address || '',
         mapLink: settings.contactDetails?.mapLink || '',
+        mapEmbedLink: settings.contactDetails?.mapEmbedLink || '',
         brochureUrl: settings.brochureUrl || '',
         brochureLabel: settings.brochureLabel || '',
         ctaTitle: settings.cta?.title || '',
@@ -153,7 +155,8 @@ const AdminSettings = () => {
         email: formData.contactEmail || undefined,
         phone: formData.contactPhone || undefined,
         address: formData.contactAddress || undefined,
-        mapLink: formData.mapLink || undefined
+        mapLink: formData.mapLink || undefined,
+        mapEmbedLink: formData.mapEmbedLink || undefined
       },
       brochureUrl: formData.brochureUrl || undefined,
       brochureLabel: formData.brochureLabel || undefined,
@@ -309,6 +312,17 @@ const AdminSettings = () => {
               className="form-input"
               value={formData.mapLink}
               onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Map Embed Link</label>
+            <input
+              type="text"
+              name="mapEmbedLink"
+              className="form-input"
+              value={formData.mapEmbedLink}
+              onChange={handleChange}
+              placeholder="Paste Google Maps embed URL (Share → Embed a map)"
             />
           </div>
         </div>
