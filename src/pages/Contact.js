@@ -111,11 +111,8 @@ const Contact = () => {
     if (link.includes('google.com/maps/embed')) {
       return link;
     }
-    if (link.includes('google.com/maps')) {
-      if (link.includes('output=embed')) {
-        return link;
-      }
-      return link.includes('?') ? `${link}&output=embed` : `${link}?output=embed`;
+    if (link.includes('google.com/maps') && link.includes('output=embed')) {
+      return link;
     }
 
     const query = encodeURIComponent(contactDetails.location || 'Dulalpur, Egra, West Bengal 721454');
