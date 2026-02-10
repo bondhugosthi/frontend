@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt, FaMapMarkerAlt, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { eventsAPI, uploadAPI } from '../utils/api';
+import { eventsAPI, settingsAPI, uploadAPI } from '../utils/api';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 import Modal from 'react-modal';
 import './AdminEvents.css';
@@ -12,6 +12,7 @@ Modal.setAppElement('#root');
 const AdminEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [defaultLocation, setDefaultLocation] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,6 +44,16 @@ const AdminEvents = () => {
     isHighlight: false
   });
 
+  const fetchDefaultLocation = useCallback(async () => {
+    try {
+      const response = await settingsAPI.get();
+      const location = response.data?.contactDetails?.address || '';
+      setDefaultLocation(location);
+    } catch (error) {
+      setDefaultLocation('');
+    }
+  }, []);
+
   const fetchEvents = useCallback(async () => {
     setLoading(true);
     try {
@@ -62,6 +73,10 @@ const AdminEvents = () => {
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
+
+  useEffect(() => {
+    fetchDefaultLocation();
+  }, [fetchDefaultLocation]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -137,7 +152,7 @@ const AdminEvents = () => {
       date: event.date?.split('T')[0] || '',
       endDate: event.endDate?.split('T')[0] || '',
       time: event.time || '',
-      location: event.location || '',
+      location: event.location || defaultLocation || '',
       status: event.status,
       organizer: event.organizer || '',
       participants: event.participants || '',
@@ -168,7 +183,7 @@ const AdminEvents = () => {
       date: '',
       endDate: '',
       time: '',
-      location: '',
+      location: defaultLocation || '',
       status: 'upcoming',
       organizer: '',
       participants: '',
