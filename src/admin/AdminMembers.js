@@ -22,6 +22,7 @@ const defaultForm = {
   twitter: '',
   photo: '',
   isActive: true,
+  isSpotlight: false,
   priority: 0,
   committeeYear: '',
   committeePosition: ''
@@ -73,6 +74,7 @@ const AdminMembers = () => {
             twitter: member.socialMedia?.twitter || '',
             photo: member.photo || '',
             isActive: member.isActive !== false,
+            isSpotlight: Boolean(member.isSpotlight),
             priority: member.priority || 0,
             committeeYear: member.committee?.year || '',
             committeePosition: member.committee?.position || ''
@@ -141,6 +143,7 @@ const AdminMembers = () => {
       },
       photo: formData.photo || undefined,
       isActive: formData.isActive,
+      isSpotlight: formData.isSpotlight,
       priority: Number(formData.priority) || 0,
       committee: formData.committeeYear || formData.committeePosition
         ? {
@@ -520,6 +523,17 @@ const AdminMembers = () => {
                 onChange={handleChange}
               />
               Active member
+            </label>
+          </div>
+          <div className="form-row">
+            <label className="form-label checkbox-row">
+              <input
+                type="checkbox"
+                name="isSpotlight"
+                checked={formData.isSpotlight}
+                onChange={handleChange}
+              />
+              Spotlight member (Homepage)
             </label>
           </div>
           <div className="modal-footer">

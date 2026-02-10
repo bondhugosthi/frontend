@@ -39,7 +39,8 @@ const AdminEvents = () => {
     status: 'upcoming',
     organizer: '',
     participants: '',
-    coverImage: ''
+    coverImage: '',
+    isHighlight: false
   });
 
   const fetchEvents = useCallback(async () => {
@@ -63,10 +64,10 @@ const AdminEvents = () => {
   }, [fetchEvents]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -140,7 +141,8 @@ const AdminEvents = () => {
       status: event.status,
       organizer: event.organizer || '',
       participants: event.participants || '',
-      coverImage: event.coverImage || ''
+      coverImage: event.coverImage || '',
+      isHighlight: Boolean(event.isHighlight)
     });
     setModalOpen(true);
   };
@@ -170,7 +172,8 @@ const AdminEvents = () => {
       status: 'upcoming',
       organizer: '',
       participants: '',
-      coverImage: ''
+      coverImage: '',
+      isHighlight: false
     });
     setModalOpen(true);
   };
@@ -530,6 +533,18 @@ const AdminEvents = () => {
                 />
               </div>
             )}
+          </div>
+
+          <div className="form-row">
+            <label className="form-label checkbox-row">
+              <input
+                type="checkbox"
+                name="isHighlight"
+                checked={formData.isHighlight}
+                onChange={handleInputChange}
+              />
+              Highlight on homepage
+            </label>
           </div>
 
           <div className="modal-footer">

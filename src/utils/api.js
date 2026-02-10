@@ -107,6 +107,14 @@ export const newsAPI = {
   delete: (id) => api.delete(`/api/news/${id}`)
 };
 
+export const testimonialsAPI = {
+  getAll: (params) => api.get('/api/testimonials', { params }),
+  getById: (id) => api.get(`/api/testimonials/${id}`),
+  create: (data) => api.post('/api/testimonials', data),
+  update: (id, data) => api.put(`/api/testimonials/${id}`, data),
+  delete: (id) => api.delete(`/api/testimonials/${id}`)
+};
+
 export const contactAPI = {
   getAll: (params) => api.get('/api/contact', { params }),
   getById: (id) => api.get(`/api/contact/${id}`),
