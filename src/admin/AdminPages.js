@@ -232,6 +232,11 @@ const AdminPages = ({ defaultPageName = 'home', lockPageSelect = false }) => {
         >
           <option value="home">Home</option>
           <option value="about">About</option>
+          <option value="events">Events</option>
+          <option value="social-work">Social Work</option>
+          <option value="gallery">Gallery</option>
+          <option value="members">Members</option>
+          <option value="news">News</option>
           <option value="contact">Contact</option>
           <option value="footer">Footer</option>
         </select>

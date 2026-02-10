@@ -41,7 +41,9 @@ const AdminEvents = () => {
     organizer: '',
     participants: '',
     coverImage: '',
-    isHighlight: false
+    isHighlight: false,
+    expectations: '',
+    faqs: ''
   });
 
   const fetchDefaultLocation = useCallback(async () => {
@@ -123,9 +125,26 @@ const AdminEvents = () => {
         return;
       }
 
+      const expectations = (formData.expectations || '')
+        .split('\n')
+        .map((item) => item.trim())
+        .filter(Boolean);
+      const faqs = (formData.faqs || '')
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [question, answer] = line.split('|').map((item) => item.trim());
+          if (!question || !answer) return null;
+          return { question, answer };
+        })
+        .filter(Boolean);
+
       const payload = {
         ...formData,
-        coverImage: formData.coverImage || undefined
+        coverImage: formData.coverImage || undefined,
+        expectations: expectations.length > 0 ? expectations : undefined,
+        faqs: faqs.length > 0 ? faqs : undefined
       };
 
       if (editingEvent) {
@@ -157,7 +176,14 @@ const AdminEvents = () => {
       organizer: event.organizer || '',
       participants: event.participants || '',
       coverImage: event.coverImage || '',
-      isHighlight: Boolean(event.isHighlight)
+      isHighlight: Boolean(event.isHighlight),
+      expectations: Array.isArray(event.expectations) ? event.expectations.join('\n') : '',
+      faqs: Array.isArray(event.faqs)
+        ? event.faqs
+            .map((item) => [item?.question, item?.answer].filter(Boolean).join(' | '))
+            .filter(Boolean)
+            .join('\n')
+        : ''
     });
     setModalOpen(true);
   };
@@ -188,7 +214,9 @@ const AdminEvents = () => {
       organizer: '',
       participants: '',
       coverImage: '',
-      isHighlight: false
+      isHighlight: false,
+      expectations: '',
+      faqs: ''
     });
     setModalOpen(true);
   };
@@ -435,6 +463,30 @@ const AdminEvents = () => {
               onChange={handleInputChange}
               required
               placeholder="Describe the event..."
+            ></textarea>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">What to Expect (one item per line)</label>
+            <textarea
+              name="expectations"
+              className="form-textarea"
+              rows="3"
+              value={formData.expectations}
+              onChange={handleInputChange}
+              placeholder="Example: Opening ceremony\nCultural performances\nRefreshments"
+            ></textarea>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">FAQs (format: Question | Answer, one per line)</label>
+            <textarea
+              name="faqs"
+              className="form-textarea"
+              rows="3"
+              value={formData.faqs}
+              onChange={handleInputChange}
+              placeholder="Example: What should I bring? | Bring your ID and entry pass."
             ></textarea>
           </div>
 

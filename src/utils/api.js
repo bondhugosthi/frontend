@@ -96,7 +96,8 @@ export const membersAPI = {
   create: (data) => api.post('/api/members', data),
   update: (id, data) => api.put(`/api/members/${id}`, data),
   delete: (id) => api.delete(`/api/members/${id}`),
-  getCommitteeByYear: (year) => api.get(`/api/members/committee/${year}`)
+  getCommitteeByYear: (year) => api.get(`/api/members/committee/${year}`),
+  getLatestCommittee: () => api.get('/api/members/committee/latest')
 };
 
 export const newsAPI = {

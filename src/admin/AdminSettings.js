@@ -35,6 +35,12 @@ const defaultForm = {
   mapLink: '',
   brochureUrl: '',
   brochureLabel: '',
+  ctaTitle: '',
+  ctaDescription: '',
+  ctaPrimaryLabel: '',
+  ctaPrimaryLink: '',
+  ctaSecondaryLabel: '',
+  ctaSecondaryLink: '',
   businessHours: defaultBusinessHours,
   facebook: '',
   instagram: '',
@@ -71,6 +77,12 @@ const AdminSettings = () => {
         mapLink: settings.contactDetails?.mapLink || '',
         brochureUrl: settings.brochureUrl || '',
         brochureLabel: settings.brochureLabel || '',
+        ctaTitle: settings.cta?.title || '',
+        ctaDescription: settings.cta?.description || '',
+        ctaPrimaryLabel: settings.cta?.primaryLabel || '',
+        ctaPrimaryLink: settings.cta?.primaryLink || '',
+        ctaSecondaryLabel: settings.cta?.secondaryLabel || '',
+        ctaSecondaryLink: settings.cta?.secondaryLink || '',
         businessHours: normalizeBusinessHours(settings.businessHours),
         facebook: settings.socialMedia?.facebook || '',
         instagram: settings.socialMedia?.instagram || '',
@@ -145,6 +157,14 @@ const AdminSettings = () => {
       },
       brochureUrl: formData.brochureUrl || undefined,
       brochureLabel: formData.brochureLabel || undefined,
+      cta: {
+        title: formData.ctaTitle || undefined,
+        description: formData.ctaDescription || undefined,
+        primaryLabel: formData.ctaPrimaryLabel || undefined,
+        primaryLink: formData.ctaPrimaryLink || undefined,
+        secondaryLabel: formData.ctaSecondaryLabel || undefined,
+        secondaryLink: formData.ctaSecondaryLink || undefined
+      },
       businessHours: formData.businessHours || [],
       socialMedia: {
         facebook: formData.facebook || undefined,
@@ -350,6 +370,80 @@ const AdminSettings = () => {
                 value={formData.brochureUrl}
                 onChange={handleChange}
                 placeholder="https://..."
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="settings-section">
+          <h2>Global Call To Action</h2>
+          <div className="form-group">
+            <label className="form-label">CTA Title</label>
+            <input
+              type="text"
+              name="ctaTitle"
+              className="form-input"
+              value={formData.ctaTitle}
+              onChange={handleChange}
+              placeholder="Join Our Community"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">CTA Description</label>
+            <textarea
+              name="ctaDescription"
+              className="form-textarea"
+              rows="3"
+              value={formData.ctaDescription}
+              onChange={handleChange}
+              placeholder="Invite visitors to connect, volunteer, or attend."
+            />
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Primary Button Label</label>
+              <input
+                type="text"
+                name="ctaPrimaryLabel"
+                className="form-input"
+                value={formData.ctaPrimaryLabel}
+                onChange={handleChange}
+                placeholder="Get in Touch"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Primary Button Link</label>
+              <input
+                type="text"
+                name="ctaPrimaryLink"
+                className="form-input"
+                value={formData.ctaPrimaryLink}
+                onChange={handleChange}
+                placeholder="/contact"
+              />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Secondary Button Label</label>
+              <input
+                type="text"
+                name="ctaSecondaryLabel"
+                className="form-input"
+                value={formData.ctaSecondaryLabel}
+                onChange={handleChange}
+                placeholder="View Events"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Secondary Button Link</label>
+              <input
+                type="text"
+                name="ctaSecondaryLink"
+                className="form-input"
+                value={formData.ctaSecondaryLink}
+                onChange={handleChange}
+                placeholder="/events"
               />
             </div>
           </div>

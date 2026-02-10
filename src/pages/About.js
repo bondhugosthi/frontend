@@ -3,10 +3,15 @@ import { motion } from 'framer-motion';
 import { FaHeart, FaHandshake, FaTrophy, FaUsers } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../components/PageHeader';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './About.css';
 
 const About = () => {
   const { t } = useTranslation();
+  const settings = useSettings();
+  usePageSeo({ pageName: 'about' });
   const values = [
     {
       icon: <FaHeart />,
@@ -161,25 +166,14 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section about-cta">
-        <div className="container">
-          <motion.div
-            className="cta-content"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="cta-title">{t('about.ctaTitle')}</h2>
-            <p className="cta-description">
-              {t('about.ctaDescription')}
-            </p>
-            <a href="/contact" className="btn btn-primary btn-lg">
-              {t('about.ctaButton')}
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      <CtaSection
+        title={settings?.cta?.title || t('about.ctaTitle')}
+        description={settings?.cta?.description || t('about.ctaDescription')}
+        primaryLabel={settings?.cta?.primaryLabel || t('about.ctaButton')}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || t('nav.events')}
+        secondaryLink={settings?.cta?.secondaryLink || '/events'}
+      />
     </div>
   );
 };

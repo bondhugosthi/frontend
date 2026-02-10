@@ -6,6 +6,7 @@ import { format, differenceInCalendarDays } from 'date-fns';
 import { eventsAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import usePageSeo from '../utils/usePageSeo';
 import './EventDetails.css';
 
 const extractImageUrl = (value) => {
@@ -73,6 +74,18 @@ const EventDetails = () => {
     fetchEventDetails();
   }, [fetchEventDetails]);
 
+  const placeholderImage = '/images/event-placeholder.svg';
+  const galleryItems = normalizeGalleryItems(event?.gallery, event?.images);
+  const coverCandidate = extractImageUrl(event?.coverImage) || galleryItems[0]?.url || placeholderImage;
+  const heroImage = resolveMediaUrl(coverCandidate) || placeholderImage;
+
+  usePageSeo({
+    pageName: 'events',
+    title: event?.title || 'Event Details',
+    description: event?.description || '',
+    ogImage: heroImage
+  });
+
   if (loading) {
     return <LoadingSpinner text="Loading event details..." />;
   }
@@ -95,11 +108,6 @@ const EventDetails = () => {
     };
     return colors[status] || 'status-upcoming';
   };
-
-  const placeholderImage = '/images/event-placeholder.svg';
-  const galleryItems = normalizeGalleryItems(event.gallery, event.images);
-  const coverCandidate = extractImageUrl(event.coverImage) || galleryItems[0]?.url || placeholderImage;
-  const heroImage = resolveMediaUrl(coverCandidate) || placeholderImage;
 
   const startDate = event?.date ? new Date(event.date) : null;
   const endDate = event?.endDate ? new Date(event.endDate) : null;
@@ -314,6 +322,31 @@ const EventDetails = () => {
                         )}
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {Array.isArray(event.expectations) && event.expectations.length > 0 && (
+                <div className="content-card">
+                  <h2 className="content-title">What to Expect</h2>
+                  <ul className="expectations-list">
+                    {event.expectations.map((item, index) => (
+                      <li key={`${item}-${index}`}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {Array.isArray(event.faqs) && event.faqs.length > 0 && (
+                <div className="content-card">
+                  <h2 className="content-title">Frequently Asked Questions</h2>
+                  <div className="faq-list">
+                    {event.faqs.map((faq, index) => (
+                      <div key={`${faq.question}-${index}`} className="faq-item">
+                        <h4>{faq.question}</h4>
+                        <p>{faq.answer}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

@@ -6,9 +6,14 @@ import { galleryAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './Gallery.css';
 
 const Gallery = () => {
+  const settings = useSettings();
+  usePageSeo({ pageName: 'gallery' });
   const [galleries, setGalleries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -137,6 +142,15 @@ const Gallery = () => {
           )}
         </div>
       </section>
+
+      <CtaSection
+        title={settings?.cta?.title || 'Share in Our Moments'}
+        description={settings?.cta?.description || 'Join us in upcoming events and be part of the memories we create together.'}
+        primaryLabel={settings?.cta?.primaryLabel || 'Join the Community'}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || 'View Events'}
+        secondaryLink={settings?.cta?.secondaryLink || '/events'}
+      />
     </div>
   );
 };

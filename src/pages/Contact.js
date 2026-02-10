@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { contactAPI, settingsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
+import usePageSeo from '../utils/usePageSeo';
 import './Contact.css';
 
 const Contact = () => {
   const { t } = useTranslation();
+  usePageSeo({ pageName: 'contact' });
   const [siteSettings, setSiteSettings] = useState({
     contactDetails: {
       email: 'bondhugosthi2010@gmail.com',

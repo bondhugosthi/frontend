@@ -8,17 +8,25 @@ import { eventsAPI, galleryAPI, newsAPI, sliderImagesAPI, pagesAPI, publicAPI, s
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './Home.css';
 
 const Home = () => {
   const { t } = useTranslation();
+  const settings = useSettings();
+  usePageSeo({ pageName: 'home' });
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [recentGalleries, setRecentGalleries] = useState([]);
   const [latestNews, setLatestNews] = useState([]);
   const [latestUpdates, setLatestUpdates] = useState([]);
   const [sliderImages, setSliderImages] = useState([]);
   const [highlightEvents, setHighlightEvents] = useState([]);
+  const [next30Events, setNext30Events] = useState([]);
   const [spotlightMembers, setSpotlightMembers] = useState([]);
+  const [committeeMembers, setCommitteeMembers] = useState([]);
+  const [committeeYear, setCommitteeYear] = useState(null);
   const [testimonials, setTestimonials] = useState([]);
   const [socialPosts, setSocialPosts] = useState([]);
   const [pressMentions, setPressMentions] = useState([]);
@@ -43,6 +51,14 @@ const Home = () => {
     return resolveMediaUrl(candidate) || galleryPlaceholder;
   };
 
+  const formatRole = (role) => {
+    if (!role) return '';
+    return role
+      .split('_')
+      .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+      .join(' ');
+  };
+
   useEffect(() => {
     fetchHomeData();
     const interval = setInterval(fetchHomeData, 60000);
@@ -51,9 +67,14 @@ const Home = () => {
 
   const fetchHomeData = async () => {
     try {
+      const now = new Date();
+      const next30 = new Date();
+      next30.setDate(next30.getDate() + 30);
+
       const [
         eventsRes,
         highlightRes,
+        next30Res,
         galleriesRes,
         newsRes,
         sliderRes,
@@ -61,12 +82,20 @@ const Home = () => {
         statsRes,
         impactRes,
         spotlightRes,
+        committeeRes,
         testimonialsRes,
         socialFeedRes,
         pressMentionsRes
       ] = await Promise.all([
         eventsAPI.getUpcoming(),
         eventsAPI.getAll({ isHighlight: true }).catch(() => ({ data: [] })),
+        eventsAPI.getAll({
+          status: 'upcoming',
+          from: now.toISOString(),
+          to: next30.toISOString(),
+          sort: 'date:asc',
+          limit: 6
+        }).catch(() => ({ data: [] })),
         galleryAPI.getAll({ limit: 6 }),
         newsAPI.getAll({ limit: 3 }),
         sliderImagesAPI.getLatest({ limit: 3 }).catch(() => ({ data: [] })),
@@ -74,24 +103,28 @@ const Home = () => {
         publicAPI.getStats().catch(() => ({ data: null })),
         socialWorkAPI.getImpactSummary().catch(() => ({ data: null })),
         membersAPI.getAll({ isSpotlight: true, isActive: true }).catch(() => ({ data: [] })),
+        membersAPI.getLatestCommittee().catch(() => ({ data: { year: null, members: [] } })),
         testimonialsAPI.getAll({ limit: 6 }).catch(() => ({ data: [] })),
         socialFeedAPI.getAll({ limit: 6 }).catch(() => ({ data: [] })),
         pressMentionsAPI.getAll({ limit: 6 }).catch(() => ({ data: [] }))
       ]);
 
       setUpcomingEvents(eventsRes.data.slice(0, 3));
-      setHighlightEvents(
-        highlightRes.data && highlightRes.data.length > 0
-          ? highlightRes.data.slice(0, 3)
-          : eventsRes.data.slice(0, 3)
-      );
-      setRecentGalleries(galleriesRes.data.slice(0, 6));
-      setLatestNews(newsRes.data.slice(0, 3));
-      setSliderImages(sliderRes.data || []);
-      setHomePageContent(homePageRes?.data || null);
-      setImpactSummary(impactRes?.data || null);
-      setSpotlightMembers(spotlightRes.data?.slice(0, 4) || []);
-      setTestimonials(testimonialsRes.data || []);
+        setHighlightEvents(
+          highlightRes.data && highlightRes.data.length > 0
+            ? highlightRes.data.slice(0, 3)
+            : eventsRes.data.slice(0, 3)
+        );
+        setNext30Events(next30Res.data || []);
+        setRecentGalleries(galleriesRes.data.slice(0, 6));
+        setLatestNews(newsRes.data.slice(0, 3));
+        setSliderImages(sliderRes.data || []);
+        setHomePageContent(homePageRes?.data || null);
+        setImpactSummary(impactRes?.data || null);
+        setSpotlightMembers(spotlightRes.data?.slice(0, 4) || []);
+        setCommitteeMembers(committeeRes.data?.members?.slice(0, 6) || []);
+        setCommitteeYear(committeeRes.data?.year || null);
+        setTestimonials(testimonialsRes.data || []);
       setSocialPosts(socialFeedRes.data || []);
       setPressMentions(pressMentionsRes.data || []);
 
@@ -206,12 +239,20 @@ const Home = () => {
 
   const impactSection = findSectionByKey(homePageContent?.sections, ['impact']);
   const highlightsSection = findSectionByKey(homePageContent?.sections, ['highlights', 'highlight']);
+  const next30Section = findSectionByKey(homePageContent?.sections, ['next_30_days', 'next30', 'next_30']);
+  const trustSection = findSectionByKey(homePageContent?.sections, ['trust', 'why_trust', 'credibility']);
+  const committeeSection = findSectionByKey(homePageContent?.sections, ['committee', 'leadership', 'leadership_committee']);
   const spotlightSection = findSectionByKey(homePageContent?.sections, ['spotlight', 'member_spotlight']);
   const updatesSection = findSectionByKey(homePageContent?.sections, ['updates', 'latest_updates']);
   const testimonialsSection = findSectionByKey(homePageContent?.sections, ['testimonial', 'testimonials']);
   const heroSupportSection = findSectionByKey(homePageContent?.sections, ['hero_support', 'hero_line']);
   const socialFeedSection = findSectionByKey(homePageContent?.sections, ['social_feed', 'social']);
   const pressSection = findSectionByKey(homePageContent?.sections, ['press', 'media']);
+
+  const next30ButtonLabel = next30Section?.images?.[0] || 'View Calendar';
+  const next30ButtonLink = next30Section?.images?.[1] || '/events';
+  const committeeButtonLabel = committeeSection?.images?.[0] || 'View Committee';
+  const committeeButtonLink = committeeSection?.images?.[1] || '/members';
 
   const sliderSettings = {
     dots: false,
@@ -429,6 +470,14 @@ const Home = () => {
       {/* Stats Section */}
       <section className="stats-section">
         <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{trustSection?.title || 'Why Trust Us'}</h2>
+              <p className="section-subtitle">
+                {trustSection?.content || 'Proven impact, trusted leadership, and a community that shows up every time.'}
+              </p>
+            </div>
+          </div>
           <div className="stats-grid">
             <motion.div
               className="stat-card"
@@ -693,10 +742,47 @@ const Home = () => {
             </div>
           )}
         </div>
-      </section>
+        </section>
 
-      {/* Latest Updates Strip */}
-      <section className="section home-updates">
+        {/* Next 30 Days */}
+        <section className="section home-next-30">
+          <div className="container">
+            <div className="section-header">
+              <div>
+                <h2 className="section-title">{next30Section?.title || 'Next 30 Days'}</h2>
+                <p className="section-subtitle">
+                  {next30Section?.content || 'Plan ahead with the events happening in the coming month.'}
+                </p>
+              </div>
+              <Link to={next30ButtonLink} className="btn btn-outline">
+                {next30ButtonLabel} <FaArrowRight />
+              </Link>
+            </div>
+
+            {next30Events.length > 0 ? (
+              <div className="next-30-grid">
+                {next30Events.map((event, index) => (
+                  <motion.div
+                    key={event._id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    viewport={{ once: true }}
+                  >
+                    <EventCard event={event} />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="no-data">
+                <p>No events scheduled in the next 30 days.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Latest Updates Strip */}
+        <section className="section home-updates">
         <div className="container">
           <div className="section-header">
             <div>
@@ -986,10 +1072,66 @@ const Home = () => {
             </div>
           )}
         </div>
-      </section>
+        </section>
 
-      {/* Testimonials */}
-      <section className="section home-testimonials">
+        {/* Leadership & Committee */}
+        <section className="section home-committee">
+          <div className="container">
+            <div className="section-header">
+              <div>
+                <h2 className="section-title">{committeeSection?.title || 'Leadership & Committee'}</h2>
+                <p className="section-subtitle">
+                  {committeeSection?.content || (committeeYear ? `Meet the ${committeeYear} committee guiding our community.` : 'Meet the leaders guiding our community.')}
+                </p>
+              </div>
+              <Link to={committeeButtonLink} className="btn btn-outline">
+                {committeeButtonLabel} <FaArrowRight />
+              </Link>
+            </div>
+
+            {committeeMembers.length > 0 ? (
+              <div className="committee-grid">
+                {committeeMembers.map((member, index) => (
+                  <motion.div
+                    key={member._id}
+                    className="committee-card"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="committee-avatar">
+                      {member.photo ? (
+                        <img
+                          src={resolveMediaUrl(member.photo)}
+                          alt={member.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <span>{member.name?.charAt(0) || 'B'}</span>
+                      )}
+                    </div>
+                    <div className="committee-info">
+                      <h3>{member.name}</h3>
+                      <p className="committee-role">{formatRole(member.role || member.committee?.position || 'Member')}</p>
+                      {member.committee?.position && (
+                        <p className="committee-position">{member.committee.position}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="no-data">
+                <p>Committee details will be updated soon.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="section home-testimonials">
         <div className="container">
           <div className="section-header text-center">
             <h2 className="section-title">{testimonialsSection?.title || 'Testimonials'}</h2>
@@ -1088,25 +1230,14 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section cta-section">
-        <div className="container">
-          <motion.div
-            className="cta-card"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="cta-title">{t('home.cta.title')}</h2>
-            <p className="cta-description">
-              {t('home.cta.description')}
-            </p>
-            <Link to="/contact" className="btn btn-primary btn-lg">
-              {t('home.cta.button')} <FaArrowRight />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      <CtaSection
+        title={settings?.cta?.title || 'Join the Bondhu Gosthi Community'}
+        description={settings?.cta?.description || 'Connect with us to attend events, volunteer, or partner in our community programs.'}
+        primaryLabel={settings?.cta?.primaryLabel || 'Get in Touch'}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || 'View Events'}
+        secondaryLink={settings?.cta?.secondaryLink || '/events'}
+      />
 
       {/* Map Image Section */}
       <section className="section home-map-section">

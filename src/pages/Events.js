@@ -8,10 +8,15 @@ import { eventsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './Events.css';
 
 const Events = () => {
   const { t } = useTranslation();
+  const settings = useSettings();
+  usePageSeo({ pageName: 'events' });
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
@@ -223,6 +228,15 @@ const Events = () => {
           )}
         </div>
       </section>
+
+      <CtaSection
+        title={settings?.cta?.title || 'Plan Your Next Event With Us'}
+        description={settings?.cta?.description || 'Stay connected with upcoming tournaments, cultural programs, and community celebrations.'}
+        primaryLabel={settings?.cta?.primaryLabel || 'Get in Touch'}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || 'View Gallery'}
+        secondaryLink={settings?.cta?.secondaryLink || '/gallery'}
+      />
     </div>
   );
 };

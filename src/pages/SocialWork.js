@@ -5,9 +5,14 @@ import { socialWorkAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './SocialWork.css';
 
 const SocialWork = () => {
+  const settings = useSettings();
+  usePageSeo({ pageName: 'social-work' });
   const [socialWork, setSocialWork] = useState([]);
   const [impactSummary, setImpactSummary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -242,26 +247,14 @@ const SocialWork = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section cta-section">
-        <div className="container">
-          <motion.div
-            className="cta-content"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="cta-title">Join Our Mission</h2>
-            <p className="cta-description">
-              Want to be part of our social initiatives? Your contribution can make a real difference 
-              in someone's life. Get in touch to learn how you can help.
-            </p>
-            <a href="/contact" className="btn btn-primary btn-lg">
-              Volunteer With Us
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      <CtaSection
+        title={settings?.cta?.title || 'Join Our Mission'}
+        description={settings?.cta?.description || 'Want to be part of our social initiatives? Your contribution can make a real difference.'}
+        primaryLabel={settings?.cta?.primaryLabel || 'Volunteer With Us'}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || 'View Events'}
+        secondaryLink={settings?.cta?.secondaryLink || '/events'}
+      />
     </div>
   );
 };

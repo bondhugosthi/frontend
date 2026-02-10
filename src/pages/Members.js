@@ -5,9 +5,14 @@ import { membersAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import CtaSection from '../components/CtaSection';
+import useSettings from '../utils/useSettings';
+import usePageSeo from '../utils/usePageSeo';
 import './Members.css';
 
 const Members = () => {
+  const settings = useSettings();
+  usePageSeo({ pageName: 'members' });
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRole, setSelectedRole] = useState('all');
@@ -214,6 +219,15 @@ const Members = () => {
           )}
         </div>
       </section>
+
+      <CtaSection
+        title={settings?.cta?.title || 'Be Part of the Team'}
+        description={settings?.cta?.description || 'Meet our members and join a community that celebrates service, sports, and culture.'}
+        primaryLabel={settings?.cta?.primaryLabel || 'Join Us'}
+        primaryLink={settings?.cta?.primaryLink || '/contact'}
+        secondaryLabel={settings?.cta?.secondaryLabel || 'View Events'}
+        secondaryLink={settings?.cta?.secondaryLink || '/events'}
+      />
     </div>
   );
 };

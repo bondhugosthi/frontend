@@ -6,9 +6,11 @@ import { newsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import usePageSeo from '../utils/usePageSeo';
 import './News.css';
 
 const News = () => {
+  usePageSeo({ pageName: 'news' });
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedType, setSelectedType] = useState('all');

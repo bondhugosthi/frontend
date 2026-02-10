@@ -5,6 +5,7 @@ import { FaArrowLeft, FaCalendarAlt, FaEye, FaTag, FaStar } from 'react-icons/fa
 import { newsAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
+import usePageSeo from '../utils/usePageSeo';
 import './NewsDetails.css';
 
 const NewsDetails = () => {
@@ -32,6 +33,13 @@ const NewsDetails = () => {
   useEffect(() => {
     fetchNewsDetails();
   }, [fetchNewsDetails]);
+
+  usePageSeo({
+    pageName: 'news',
+    title: news?.title || 'News Details',
+    description: news?.description || news?.content?.substring(0, 160) || '',
+    ogImage: news?.image ? resolveMediaUrl(news.image) : ''
+  });
 
   if (loading) {
     return <LoadingSpinner text="Loading news..." />;
