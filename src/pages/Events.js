@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaChevronLeft, FaChevronRight, FaListUl } from 'react-icons/fa';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, addMonths, subMonths, isSameMonth, isSameDay } from 'date-fns';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { eventsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
@@ -14,6 +16,8 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
   const [activeType, setActiveType] = useState('all');
+  const [viewMode, setViewMode] = useState('list');
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
@@ -50,6 +54,64 @@ const Events = () => {
     { id: 'social', label: t('events.types.social', { defaultValue: 'Social' }) }
   ];
 
+  const eventsByDate = useMemo(() => {
+    const map = new Map();
+    events.forEach((event) => {
+      if (!event.date) return;
+      const key = format(new Date(event.date), 'yyyy-MM-dd');
+      const list = map.get(key) || [];
+      list.push(event);
+      map.set(key, list);
+    });
+    return map;
+  }, [events]);
+
+  const calendarDays = useMemo(() => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart, { weekStartsOn: 0 });
+    const endDate = endOfWeek(monthEnd, { weekStartsOn: 0 });
+    const days = [];
+    let day = startDate;
+    while (day <= endDate) {
+      days.push(day);
+      day = addDays(day, 1);
+    }
+    return days;
+  }, [currentMonth]);
+
+  const renderCalendarCells = () => (
+    <div className="calendar-grid">
+      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((label) => (
+        <div key={label} className="calendar-header-cell">{label}</div>
+      ))}
+      {calendarDays.map((day) => {
+        const key = format(day, 'yyyy-MM-dd');
+        const dayEvents = eventsByDate.get(key) || [];
+        return (
+          <div
+            key={key}
+            className={`calendar-cell ${!isSameMonth(day, currentMonth) ? 'calendar-outside' : ''} ${
+              isSameDay(day, new Date()) ? 'calendar-today' : ''
+            }`}
+          >
+            <div className="calendar-date">{format(day, 'd')}</div>
+            <div className="calendar-events">
+              {dayEvents.slice(0, 2).map((event) => (
+                <Link key={event._id} to={`/events/${event._id}`} className="calendar-event">
+                  {event.title}
+                </Link>
+              ))}
+              {dayEvents.length > 2 && (
+                <span className="calendar-more">+{dayEvents.length - 2} more</span>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className="events-page">
       <PageHeader
@@ -62,6 +124,24 @@ const Events = () => {
         <div className="container">
           {/* Filters */}
           <div className="events-filters">
+            <div className="filter-group view-toggle">
+              <label className="filter-label">View:</label>
+              <div className="filter-tabs">
+                <button
+                  className={`filter-tab ${viewMode === 'list' ? 'active' : ''}`}
+                  onClick={() => setViewMode('list')}
+                >
+                  <FaListUl /> List
+                </button>
+                <button
+                  className={`filter-tab ${viewMode === 'calendar' ? 'active' : ''}`}
+                  onClick={() => setViewMode('calendar')}
+                >
+                  <FaCalendarAlt /> Calendar
+                </button>
+              </div>
+            </div>
+
             {/* Status Tabs */}
             <div className="filter-group">
               <label className="filter-label">{t('events.statusLabel', { defaultValue: 'Status:' })}</label>
@@ -98,6 +178,22 @@ const Events = () => {
           {/* Events Grid */}
           {loading ? (
             <LoadingSpinner text={t('events.loading', { defaultValue: 'Loading events...' })} />
+          ) : viewMode === 'calendar' ? (
+            <div className="events-calendar">
+              <div className="calendar-toolbar">
+                <button className="calendar-nav" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
+                  <FaChevronLeft />
+                </button>
+                <div className="calendar-title">{format(currentMonth, 'MMMM yyyy')}</div>
+                <button className="calendar-nav" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+                  <FaChevronRight />
+                </button>
+                <button className="calendar-today-btn" onClick={() => setCurrentMonth(new Date())}>
+                  Today
+                </button>
+              </div>
+              {renderCalendarCells()}
+            </div>
           ) : events.length > 0 ? (
             <motion.div
               className="events-grid"

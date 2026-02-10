@@ -5,6 +5,25 @@ import { settingsAPI, uploadAPI } from '../utils/api';
 import { resolveMediaUrl } from '../utils/mediaUrl';
 import './AdminSettings.css';
 
+const defaultBusinessHours = [
+  { day: 'Monday', open: '', close: '', isClosed: false },
+  { day: 'Tuesday', open: '', close: '', isClosed: false },
+  { day: 'Wednesday', open: '', close: '', isClosed: false },
+  { day: 'Thursday', open: '', close: '', isClosed: false },
+  { day: 'Friday', open: '', close: '', isClosed: false },
+  { day: 'Saturday', open: '', close: '', isClosed: false },
+  { day: 'Sunday', open: '', close: '', isClosed: false }
+];
+
+const normalizeBusinessHours = (value) => {
+  const items = Array.isArray(value) ? value : [];
+  const map = new Map(items.map((item) => [item.day, item]));
+  return defaultBusinessHours.map((day) => ({
+    ...day,
+    ...map.get(day.day)
+  }));
+};
+
 const defaultForm = {
   websiteName: '',
   tagline: '',
@@ -14,6 +33,9 @@ const defaultForm = {
   contactPhone: '',
   contactAddress: '',
   mapLink: '',
+  brochureUrl: '',
+  brochureLabel: '',
+  businessHours: defaultBusinessHours,
   facebook: '',
   instagram: '',
   twitter: '',
@@ -47,6 +69,9 @@ const AdminSettings = () => {
         contactPhone: settings.contactDetails?.phone || '',
         contactAddress: settings.contactDetails?.address || '',
         mapLink: settings.contactDetails?.mapLink || '',
+        brochureUrl: settings.brochureUrl || '',
+        brochureLabel: settings.brochureLabel || '',
+        businessHours: normalizeBusinessHours(settings.businessHours),
         facebook: settings.socialMedia?.facebook || '',
         instagram: settings.socialMedia?.instagram || '',
         twitter: settings.socialMedia?.twitter || '',
@@ -70,6 +95,19 @@ const AdminSettings = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleBusinessHourChange = (index, field, value) => {
+    setFormData((prev) => {
+      const nextHours = prev.businessHours.map((item, idx) => {
+        if (idx !== index) return item;
+        return {
+          ...item,
+          [field]: field === 'isClosed' ? value : value
+        };
+      });
+      return { ...prev, businessHours: nextHours };
+    });
   };
 
   const handleUpload = async (e, field) => {
@@ -105,6 +143,9 @@ const AdminSettings = () => {
         address: formData.contactAddress || undefined,
         mapLink: formData.mapLink || undefined
       },
+      brochureUrl: formData.brochureUrl || undefined,
+      brochureLabel: formData.brochureLabel || undefined,
+      businessHours: formData.businessHours || [],
       socialMedia: {
         facebook: formData.facebook || undefined,
         instagram: formData.instagram || undefined,
@@ -249,6 +290,68 @@ const AdminSettings = () => {
               value={formData.mapLink}
               onChange={handleChange}
             />
+          </div>
+        </div>
+
+        <div className="settings-section">
+          <h2>Business Hours</h2>
+          <div className="business-hours-grid">
+            {formData.businessHours.map((item, index) => (
+              <div key={item.day} className="business-hour-row">
+                <div className="business-day">{item.day}</div>
+                <label className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    checked={item.isClosed}
+                    onChange={(e) => handleBusinessHourChange(index, 'isClosed', e.target.checked)}
+                  />
+                  Closed
+                </label>
+                <input
+                  type="time"
+                  className="form-input"
+                  value={item.open || ''}
+                  onChange={(e) => handleBusinessHourChange(index, 'open', e.target.value)}
+                  disabled={item.isClosed}
+                />
+                <span className="time-separator">to</span>
+                <input
+                  type="time"
+                  className="form-input"
+                  value={item.close || ''}
+                  onChange={(e) => handleBusinessHourChange(index, 'close', e.target.value)}
+                  disabled={item.isClosed}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="settings-section">
+          <h2>Brochure</h2>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Brochure Label</label>
+              <input
+                type="text"
+                name="brochureLabel"
+                className="form-input"
+                value={formData.brochureLabel}
+                onChange={handleChange}
+                placeholder="Download Club Brochure"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Brochure URL</label>
+              <input
+                type="url"
+                name="brochureUrl"
+                className="form-input"
+                value={formData.brochureUrl}
+                onChange={handleChange}
+                placeholder="https://..."
+              />
+            </div>
           </div>
         </div>
 

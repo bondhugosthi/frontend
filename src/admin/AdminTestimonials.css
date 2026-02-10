@@ -1,0 +1,37 @@
+@import './AdminEvents.css';
+
+.admin-testimonials-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.testimonial-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.testimonial-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
+.testimonial-thumb.fallback {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.testimonial-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--brand-gold);
+  font-weight: 600;
+}

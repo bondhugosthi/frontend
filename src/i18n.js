@@ -19,6 +19,9 @@ const resources = {
         gallery: 'Gallery',
         members: 'Members',
         news: 'News',
+        testimonials: 'Testimonials',
+        socialFeed: 'Social Feed',
+        pressMentions: 'Press Mentions',
         contact: 'Contact',
         themeLight: 'Switch to light mode',
         themeDark: 'Switch to dark mode',
@@ -1261,4 +1264,3 @@ i18n.on('languageChanged', (language) => {
 });
 
 export default i18n;
-

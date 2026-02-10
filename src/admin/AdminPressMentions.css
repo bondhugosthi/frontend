@@ -1,0 +1,6 @@
+@import './AdminEvents.css';
+
+.admin-press-mentions-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}

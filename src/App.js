@@ -37,6 +37,9 @@ const AdminGallery = lazy(() => import('./admin/AdminGallery'));
 const AdminSliderImages = lazy(() => import('./admin/AdminSliderImages'));
 const AdminMembers = lazy(() => import('./admin/AdminMembers'));
 const AdminNews = lazy(() => import('./admin/AdminNews'));
+const AdminTestimonials = lazy(() => import('./admin/AdminTestimonials'));
+const AdminSocialFeed = lazy(() => import('./admin/AdminSocialFeed'));
+const AdminPressMentions = lazy(() => import('./admin/AdminPressMentions'));
 const AdminContact = lazy(() => import('./admin/AdminContact'));
 const AdminPages = lazy(() => import('./admin/AdminPages'));
 const AdminSettings = lazy(() => import('./admin/AdminSettings'));
@@ -169,6 +172,9 @@ function App() {
                 <Route path="slider-images" element={<AdminSliderImages />} />
                 <Route path="members" element={<AdminMembers />} />
                 <Route path="news" element={<AdminNews />} />
+                <Route path="testimonials" element={<AdminTestimonials />} />
+                <Route path="social-feed" element={<AdminSocialFeed />} />
+                <Route path="press-mentions" element={<AdminPressMentions />} />
                 <Route path="contact" element={<AdminContact />} />
                 <Route path="pages" element={<AdminPages />} />
                 <Route path="home-edit" element={<AdminPages defaultPageName="home" lockPageSelect />} />

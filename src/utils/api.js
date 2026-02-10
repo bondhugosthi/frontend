@@ -115,6 +115,22 @@ export const testimonialsAPI = {
   delete: (id) => api.delete(`/api/testimonials/${id}`)
 };
 
+export const socialFeedAPI = {
+  getAll: (params) => api.get('/api/social-posts', { params }),
+  getById: (id) => api.get(`/api/social-posts/${id}`),
+  create: (data) => api.post('/api/social-posts', data),
+  update: (id, data) => api.put(`/api/social-posts/${id}`, data),
+  delete: (id) => api.delete(`/api/social-posts/${id}`)
+};
+
+export const pressMentionsAPI = {
+  getAll: (params) => api.get('/api/press-mentions', { params }),
+  getById: (id) => api.get(`/api/press-mentions/${id}`),
+  create: (data) => api.post('/api/press-mentions', data),
+  update: (id, data) => api.put(`/api/press-mentions/${id}`, data),
+  delete: (id) => api.delete(`/api/press-mentions/${id}`)
+};
+
 export const contactAPI = {
   getAll: (params) => api.get('/api/contact', { params }),
   getById: (id) => api.get(`/api/contact/${id}`),

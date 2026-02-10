@@ -165,6 +165,55 @@
   color: var(--brand-gold);
 }
 
+.footer-hours {
+  margin-top: 1.2rem;
+}
+
+.footer-hours h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: var(--brand-cream);
+}
+
+.footer-hours ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.footer-hours li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(var(--brand-cream-rgb), 0.75);
+  font-size: 0.85rem;
+}
+
+.footer-brochure-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  background: rgba(var(--brand-cream-rgb), 0.12);
+  border: 1px solid rgba(var(--brand-cream-rgb), 0.2);
+  color: var(--brand-cream);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.footer-brochure-link:hover {
+  background: linear-gradient(135deg, var(--brand-gold), var(--brand-teal));
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(var(--brand-teal-rgb), 0.35);
+}
+
 .footer-bottom {
   background-color: rgba(var(--brand-teal-rgb), 0.8);
   padding: 1.5rem 0;

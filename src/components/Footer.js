@@ -15,6 +15,16 @@ const Footer = () => {
     websiteName: '',
     tagline: ''
   });
+  const [contactDetails, setContactDetails] = useState({
+    email: 'bondhugosthi2010@gmail.com',
+    phone: '+91 6295221588',
+    address: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454'
+  });
+  const [businessHours, setBusinessHours] = useState([]);
+  const [brochure, setBrochure] = useState({
+    url: '',
+    label: ''
+  });
   const [istTime, setIstTime] = useState(() => new Date());
 
   const quickLinks = [
@@ -53,6 +63,16 @@ const Footer = () => {
           logo: settings.logo || '',
           websiteName: settings.websiteName || '',
           tagline: settings.tagline || ''
+        });
+        setContactDetails({
+          email: settings.contactDetails?.email || 'bondhugosthi2010@gmail.com',
+          phone: settings.contactDetails?.phone || '+91 6295221588',
+          address: settings.contactDetails?.address || 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454'
+        });
+        setBusinessHours(settings.businessHours || []);
+        setBrochure({
+          url: settings.brochureUrl || '',
+          label: settings.brochureLabel || ''
         });
       })
       .catch(() => {});
@@ -180,17 +200,42 @@ const Footer = () => {
               <ul className="footer-contact">
                 <li>
                   <FaEnvelope className="contact-icon" />
-                  <a href="mailto:bondhugosthi2010@gmail.com">bondhugosthi2010@gmail.com</a>
+                  <a href={`mailto:${contactDetails.email}`}>{contactDetails.email}</a>
                 </li>
                 <li>
                   <FaPhone className="contact-icon" />
-                  <a href="tel:+916295221588">+91 6295221588</a>
+                  <a href={`tel:${contactDetails.phone.replace(/\s+/g, '')}`}>{contactDetails.phone}</a>
                 </li>
                 <li>
                   <FaMapMarkerAlt className="contact-icon" />
-                  <span>Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454</span>
+                  <span>{contactDetails.address}</span>
                 </li>
               </ul>
+
+              {businessHours.length > 0 && (
+                <div className="footer-hours">
+                  <h4>Business Hours</h4>
+                  <ul>
+                    {businessHours.map((item) => (
+                      <li key={item.day}>
+                        <span>{item.day}</span>
+                        <span>{item.isClosed ? 'Closed' : `${item.open || '--:--'} - ${item.close || '--:--'}`}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {brochure.url && (
+                <a
+                  href={brochure.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-brochure-link"
+                >
+                  {brochure.label || 'Download Brochure'}
+                </a>
+              )}
             </div>
           </div>
         </div>

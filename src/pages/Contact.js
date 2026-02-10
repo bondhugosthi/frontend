@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { contactAPI } from '../utils/api';
+import { contactAPI, settingsAPI } from '../utils/api';
 import PageHeader from '../components/PageHeader';
 import './Contact.css';
 
 const Contact = () => {
   const { t } = useTranslation();
+  const [siteSettings, setSiteSettings] = useState({
+    contactDetails: {
+      email: 'bondhugosthi2010@gmail.com',
+      phone: '+91 6295221588',
+      address: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
+      mapLink: 'https://www.google.com/maps?q=721454'
+    },
+    businessHours: [],
+    brochureUrl: '',
+    brochureLabel: ''
+  });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +29,34 @@ const Contact = () => {
     message: ''
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    settingsAPI.get()
+      .then((response) => {
+        if (!isMounted) {
+          return;
+        }
+        const settings = response.data || {};
+        setSiteSettings({
+          contactDetails: {
+            email: settings.contactDetails?.email || 'bondhugosthi2010@gmail.com',
+            phone: settings.contactDetails?.phone || '+91 6295221588',
+            address: settings.contactDetails?.address || 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
+            mapLink: settings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454'
+          },
+          businessHours: settings.businessHours || [],
+          brochureUrl: settings.brochureUrl || '',
+          brochureLabel: settings.brochureLabel || ''
+        });
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -49,12 +88,24 @@ const Contact = () => {
   };
 
   const contactDetails = {
-    email: 'bondhugosthi2010@gmail.com',
-    phoneDisplay: '+91 6295221588',
-    phoneLink: 'tel:+916295221588',
-    location: 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
-    mapLink: 'https://www.google.com/maps?q=721454'
+    email: siteSettings.contactDetails?.email || 'bondhugosthi2010@gmail.com',
+    phoneDisplay: siteSettings.contactDetails?.phone || '+91 6295221588',
+    phoneLink: `tel:${(siteSettings.contactDetails?.phone || '+916295221588').replace(/\s+/g, '')}`,
+    location: siteSettings.contactDetails?.address || 'Dulal Pur & Fazel Pur, Purba Mednipur, West Bengal, India, 721454',
+    mapLink: siteSettings.contactDetails?.mapLink || 'https://www.google.com/maps?q=721454'
   };
+
+  const mapEmbedUrl = (() => {
+    const base = contactDetails.mapLink || 'https://www.google.com/maps?q=721454';
+    if (base.includes('output=embed')) {
+      return base;
+    }
+    return base.includes('?') ? `${base}&output=embed` : `${base}?output=embed`;
+  })();
+
+  const businessHours = Array.isArray(siteSettings.businessHours)
+    ? siteSettings.businessHours
+    : [];
 
   const contactInfo = [
     {
@@ -266,6 +317,33 @@ const Contact = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Business Hours */}
+              {businessHours.length > 0 && (
+                <div className="hours-section">
+                  <h3 className="hours-title">Business Hours</h3>
+                  <ul className="hours-list">
+                    {businessHours.map((item) => (
+                      <li key={item.day} className="hours-row">
+                        <span className="hours-day">{item.day}</span>
+                        <span className="hours-time">
+                          {item.isClosed ? 'Closed' : `${item.open || '--:--'} - ${item.close || '--:--'}`}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  {siteSettings.brochureUrl && (
+                    <a
+                      href={siteSettings.brochureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline hours-brochure"
+                    >
+                      {siteSettings.brochureLabel || 'Download Brochure'}
+                    </a>
+                  )}
+                </div>
+              )}
             </motion.div>
           </div>
 
@@ -286,7 +364,7 @@ const Contact = () => {
             <div className="map-card">
               <div className="map-container">
                 <iframe
-                  src="https://www.google.com/maps?q=721454&output=embed"
+                  src={mapEmbedUrl}
                   width="100%"
                   height="100%"
                   style={{ border: 0, borderRadius: 'var(--radius-lg)', height: '100%' }}

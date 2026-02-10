@@ -14,6 +14,12 @@
   margin-bottom: 3rem;
 }
 
+.view-toggle .filter-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .filter-group {
   display: flex;
   align-items: center;
@@ -63,6 +69,115 @@
   gap: 2rem;
 }
 
+.events-calendar {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.calendar-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.calendar-nav,
+.calendar-today-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: var(--text-primary);
+}
+
+.calendar-nav:hover,
+.calendar-today-btn:hover {
+  background: rgba(var(--brand-teal-rgb), 0.12);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.75rem;
+  min-width: 840px;
+}
+
+.calendar-header-cell {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.calendar-cell {
+  min-height: 120px;
+  padding: 0.65rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid rgba(var(--brand-teal-rgb), 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.calendar-outside {
+  opacity: 0.5;
+}
+
+.calendar-today {
+  border-color: rgba(var(--brand-gold-rgb), 0.6);
+  box-shadow: 0 0 0 1px rgba(var(--brand-gold-rgb), 0.3);
+}
+
+.calendar-date {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.calendar-events {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.calendar-event {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.5rem;
+  background: rgba(var(--brand-teal-rgb), 0.12);
+  color: var(--brand-teal);
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-event:hover {
+  background: rgba(var(--brand-teal-rgb), 0.2);
+}
+
+.calendar-more {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
 .no-events {
   text-align: center;
   padding: 5rem 2rem;
@@ -105,5 +220,9 @@
 
   .filter-label {
     min-width: auto;
+  }
+
+  .calendar-cell {
+    min-height: 140px;
   }
 }

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaCalendarAlt, FaRunning, FaHandsHelping, FaImages, FaArrowRight, FaTrophy, FaUsers, FaHeart } from 'react-icons/fa';
+import { FaCalendarAlt, FaRunning, FaHandsHelping, FaImages, FaArrowRight, FaTrophy, FaUsers, FaHeart, FaQuoteLeft, FaNewspaper } from 'react-icons/fa';
 import Slider from 'react-slick';
 import { useTranslation } from 'react-i18next';
-import { eventsAPI, galleryAPI, newsAPI, sliderImagesAPI, pagesAPI, publicAPI } from '../utils/api';
+import { eventsAPI, galleryAPI, newsAPI, sliderImagesAPI, pagesAPI, publicAPI, socialWorkAPI, membersAPI, testimonialsAPI, socialFeedAPI, pressMentionsAPI } from '../utils/api';
 import EventCard from '../components/EventCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { resolveMediaUrl } from '../utils/mediaUrl';
@@ -15,14 +15,22 @@ const Home = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [recentGalleries, setRecentGalleries] = useState([]);
   const [latestNews, setLatestNews] = useState([]);
+  const [latestUpdates, setLatestUpdates] = useState([]);
   const [sliderImages, setSliderImages] = useState([]);
+  const [highlightEvents, setHighlightEvents] = useState([]);
+  const [spotlightMembers, setSpotlightMembers] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [socialPosts, setSocialPosts] = useState([]);
+  const [pressMentions, setPressMentions] = useState([]);
+  const [impactSummary, setImpactSummary] = useState(null);
   const [homePageContent, setHomePageContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     events: 0,
     members: 0,
     socialWork: 0,
-    tournaments: 0
+    tournaments: 0,
+    peopleHelped: 0
   });
   const galleryPlaceholder = '/images/gallery-placeholder.svg';
 
@@ -37,33 +45,85 @@ const Home = () => {
 
   useEffect(() => {
     fetchHomeData();
+    const interval = setInterval(fetchHomeData, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchHomeData = async () => {
     try {
-      const [eventsRes, galleriesRes, newsRes, sliderRes, homePageRes, statsRes] = await Promise.all([
+      const [
+        eventsRes,
+        highlightRes,
+        galleriesRes,
+        newsRes,
+        sliderRes,
+        homePageRes,
+        statsRes,
+        impactRes,
+        spotlightRes,
+        testimonialsRes,
+        socialFeedRes,
+        pressMentionsRes
+      ] = await Promise.all([
         eventsAPI.getUpcoming(),
+        eventsAPI.getAll({ isHighlight: true }).catch(() => ({ data: [] })),
         galleryAPI.getAll({ limit: 6 }),
         newsAPI.getAll({ limit: 3 }),
         sliderImagesAPI.getLatest({ limit: 3 }).catch(() => ({ data: [] })),
         pagesAPI.getByName('home').catch(() => ({ data: null })),
-        publicAPI.getStats().catch(() => ({ data: null }))
+        publicAPI.getStats().catch(() => ({ data: null })),
+        socialWorkAPI.getImpactSummary().catch(() => ({ data: null })),
+        membersAPI.getAll({ isSpotlight: true, isActive: true }).catch(() => ({ data: [] })),
+        testimonialsAPI.getAll({ limit: 6 }).catch(() => ({ data: [] })),
+        socialFeedAPI.getAll({ limit: 6 }).catch(() => ({ data: [] })),
+        pressMentionsAPI.getAll({ limit: 6 }).catch(() => ({ data: [] }))
       ]);
 
       setUpcomingEvents(eventsRes.data.slice(0, 3));
+      setHighlightEvents(
+        highlightRes.data && highlightRes.data.length > 0
+          ? highlightRes.data.slice(0, 3)
+          : eventsRes.data.slice(0, 3)
+      );
       setRecentGalleries(galleriesRes.data.slice(0, 6));
       setLatestNews(newsRes.data.slice(0, 3));
       setSliderImages(sliderRes.data || []);
       setHomePageContent(homePageRes?.data || null);
+      setImpactSummary(impactRes?.data || null);
+      setSpotlightMembers(spotlightRes.data?.slice(0, 4) || []);
+      setTestimonials(testimonialsRes.data || []);
+      setSocialPosts(socialFeedRes.data || []);
+      setPressMentions(pressMentionsRes.data || []);
 
       if (statsRes?.data) {
         setStats({
           events: Number(statsRes.data.events) || 0,
           members: Number(statsRes.data.members) || 0,
           socialWork: Number(statsRes.data.socialWork) || 0,
-          tournaments: Number(statsRes.data.tournaments) || 0
+          tournaments: Number(statsRes.data.tournaments) || 0,
+          peopleHelped: Number(statsRes.data.peopleHelped) || 0
         });
       }
+
+      const updateItems = [
+        ...eventsRes.data.slice(0, 3).map((event) => ({
+          id: event._id,
+          type: 'event',
+          title: event.title,
+          date: event.date,
+          link: `/events/${event._id}`
+        })),
+        ...newsRes.data.slice(0, 3).map((news) => ({
+          id: news._id,
+          type: 'news',
+          title: news.title,
+          date: news.publishDate || news.createdAt,
+          link: `/news/${news._id}`
+        }))
+      ];
+
+      updateItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setLatestUpdates(updateItems.slice(0, 6));
     } catch (error) {
       console.error('Error fetching home data:', error);
     } finally {
@@ -132,6 +192,27 @@ const Home = () => {
   const aboutSection = findAboutSection(homePageContent?.sections);
   const aboutImage = aboutSection?.images?.find((img) => Boolean(img)) || null;
 
+  const findSectionByKey = (sections, keys) => {
+    if (!Array.isArray(sections)) {
+      return null;
+    }
+    return sections.find((section) => {
+      const normalized = normalizeSectionName(
+        `${section.sectionName || ''} ${section.title || ''}`
+      );
+      return keys.some((key) => normalized.includes(key));
+    });
+  };
+
+  const impactSection = findSectionByKey(homePageContent?.sections, ['impact']);
+  const highlightsSection = findSectionByKey(homePageContent?.sections, ['highlights', 'highlight']);
+  const spotlightSection = findSectionByKey(homePageContent?.sections, ['spotlight', 'member_spotlight']);
+  const updatesSection = findSectionByKey(homePageContent?.sections, ['updates', 'latest_updates']);
+  const testimonialsSection = findSectionByKey(homePageContent?.sections, ['testimonial', 'testimonials']);
+  const heroSupportSection = findSectionByKey(homePageContent?.sections, ['hero_support', 'hero_line']);
+  const socialFeedSection = findSectionByKey(homePageContent?.sections, ['social_feed', 'social']);
+  const pressSection = findSectionByKey(homePageContent?.sections, ['press', 'media']);
+
   const sliderSettings = {
     dots: false,
     arrows: false,
@@ -180,6 +261,80 @@ const Home = () => {
       festival: 'badge-purple'
     };
     return badges[type] || 'badge-secondary';
+  };
+
+  const formatDate = (value) => {
+    if (!value) return '';
+    return new Date(value).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const categoryLabels = {
+    food_distribution: 'Food Distribution',
+    education: 'Education Support',
+    health: 'Health Camps',
+    disaster_relief: 'Disaster Relief',
+    community_service: 'Community Service',
+    other: 'Other Initiatives'
+  };
+
+  const impactCategories = (impactSummary?.categoryCounts || []).slice(0, 4);
+
+  const testimonialSettings = {
+    dots: true,
+    arrows: false,
+    infinite: testimonials.length > 3,
+    autoplay: testimonials.length > 3,
+    autoplaySpeed: 5000,
+    speed: 600,
+    slidesToShow: Math.min(3, testimonials.length || 1),
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: Math.min(2, testimonials.length || 1) }
+      },
+      {
+        breakpoint: 768,
+        settings: { slidesToShow: 1 }
+      }
+    ]
+  };
+
+  const CountUp = ({ value, suffix = '' }) => {
+    const [display, setDisplay] = useState(0);
+
+    useEffect(() => {
+      let frame;
+      let start;
+      const duration = 1200;
+      const target = Number(value) || 0;
+
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        setDisplay(Math.floor(progress * target));
+        if (progress < 1) {
+          frame = requestAnimationFrame(step);
+        }
+      };
+
+      frame = requestAnimationFrame(step);
+
+      return () => {
+        if (frame) cancelAnimationFrame(frame);
+      };
+    }, [value]);
+
+    return (
+      <span>
+        {display.toLocaleString()}
+        {suffix}
+      </span>
+    );
   };
 
   const mapDetails = [
@@ -235,6 +390,29 @@ const Home = () => {
               <h1 className="hero-title">{heroContent.titleMain}</h1>
               <p className="hero-subtitle">{heroContent.subtitle}</p>
               <p className="hero-description">{heroContent.description}</p>
+              {heroSupportSection?.content && (
+                <p className="hero-support">{heroSupportSection.content}</p>
+              )}
+              <div className="hero-mini-stats">
+                <div className="hero-mini-stat">
+                  <span className="hero-mini-value">
+                    <CountUp value={stats.events} />+
+                  </span>
+                  <span className="hero-mini-label">{t('common.eventsOrganized')}</span>
+                </div>
+                <div className="hero-mini-stat">
+                  <span className="hero-mini-value">
+                    <CountUp value={stats.members} />+
+                  </span>
+                  <span className="hero-mini-label">{t('common.activeMembers')}</span>
+                </div>
+                <div className="hero-mini-stat">
+                  <span className="hero-mini-value">
+                    <CountUp value={stats.peopleHelped} />+
+                  </span>
+                  <span className="hero-mini-label">People Helped</span>
+                </div>
+              </div>
               <div className="hero-actions">
                 <Link to={heroContent.primaryCta.link} className="hero-btn hero-btn-primary">
                   {heroContent.primaryCta.text}
@@ -261,7 +439,9 @@ const Home = () => {
                 <FaCalendarAlt />
               </div>
               <div className="stat-content">
-                <h3 className="stat-number">{stats.events}+</h3>
+                <h3 className="stat-number">
+                  <CountUp value={stats.events} />+
+                </h3>
                 <p className="stat-label">{t('common.eventsOrganized')}</p>
               </div>
             </motion.div>
@@ -275,7 +455,9 @@ const Home = () => {
                 <FaUsers />
               </div>
               <div className="stat-content">
-                <h3 className="stat-number">{stats.members}+</h3>
+                <h3 className="stat-number">
+                  <CountUp value={stats.members} />+
+                </h3>
                 <p className="stat-label">{t('common.activeMembers')}</p>
               </div>
             </motion.div>
@@ -289,7 +471,9 @@ const Home = () => {
                 <FaHeart />
               </div>
               <div className="stat-content">
-                <h3 className="stat-number">{stats.socialWork}+</h3>
+                <h3 className="stat-number">
+                  <CountUp value={stats.socialWork} />+
+                </h3>
                 <p className="stat-label">{t('common.socialInitiatives')}</p>
               </div>
             </motion.div>
@@ -303,7 +487,9 @@ const Home = () => {
                 <FaTrophy />
               </div>
               <div className="stat-content">
-                <h3 className="stat-number">{stats.tournaments}+</h3>
+                <h3 className="stat-number">
+                  <CountUp value={stats.tournaments} />+
+                </h3>
                 <p className="stat-label">{t('common.tournaments')}</p>
               </div>
             </motion.div>
@@ -348,6 +534,64 @@ const Home = () => {
               )}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Impact Section */}
+      <section className="section home-impact">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{impactSection?.title || 'Our Impact'}</h2>
+              <p className="section-subtitle">
+                {impactSection?.content || 'Real stories and measurable impact from our community programs.'}
+              </p>
+            </div>
+            <Link to="/social-work" className="btn btn-outline">
+              View Social Work <FaArrowRight />
+            </Link>
+          </div>
+
+          <div className="impact-grid">
+            <div className="impact-card">
+              <span className="impact-label">People Helped</span>
+              <h3 className="impact-value">
+                <CountUp value={stats.peopleHelped} />+
+              </h3>
+              <p className="impact-meta">Across our outreach programs</p>
+            </div>
+            <div className="impact-card">
+              <span className="impact-label">Initiatives</span>
+              <h3 className="impact-value">
+                <CountUp value={impactSummary?.totalActivities || stats.socialWork} />+
+              </h3>
+              <p className="impact-meta">Community projects delivered</p>
+            </div>
+            <div className="impact-card">
+              <span className="impact-label">Active Members</span>
+              <h3 className="impact-value">
+                <CountUp value={stats.members} />+
+              </h3>
+              <p className="impact-meta">Volunteers and organizers</p>
+            </div>
+            <div className="impact-card">
+              <span className="impact-label">Events Hosted</span>
+              <h3 className="impact-value">
+                <CountUp value={stats.events} />+
+              </h3>
+              <p className="impact-meta">Sports, culture, and service</p>
+            </div>
+          </div>
+
+          {impactCategories.length > 0 && (
+            <div className="impact-tags">
+              {impactCategories.map((item) => (
+                <span key={item._id} className="impact-tag">
+                  {categoryLabels[item._id] || item._id} ({item.count})
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -409,6 +653,139 @@ const Home = () => {
           ) : (
             <div className="no-data">
               <p>{t('common.noUpcomingEvents')}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Highlights Section */}
+      <section className="section home-highlights">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{highlightsSection?.title || 'Upcoming Highlights'}</h2>
+              <p className="section-subtitle">
+                {highlightsSection?.content || 'Featured events and celebrations coming up soon.'}
+              </p>
+            </div>
+            <Link to="/events" className="btn btn-outline">
+              {t('common.viewAllEvents')} <FaArrowRight />
+            </Link>
+          </div>
+
+          {highlightEvents.length > 0 ? (
+            <div className="events-grid">
+              {highlightEvents.map((event, index) => (
+                <motion.div
+                  key={event._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <EventCard event={event} />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-data">
+              <p>No highlight events yet. Check back soon!</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Latest Updates Strip */}
+      <section className="section home-updates">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{updatesSection?.title || 'Latest Updates'}</h2>
+              <p className="section-subtitle">
+                {updatesSection?.content || 'Fresh news and upcoming events from Bondhu Gosthi.'}
+              </p>
+            </div>
+            <Link to="/news" className="btn btn-outline">
+              {t('common.viewAllNews')} <FaArrowRight />
+            </Link>
+          </div>
+
+          {latestUpdates.length > 0 ? (
+            <div className="updates-list">
+              {latestUpdates.map((item) => (
+                <Link key={`${item.type}-${item.id}`} to={item.link} className="update-item">
+                  <span className={`update-badge update-${item.type}`}>
+                    {item.type === 'news' ? <FaNewspaper /> : <FaCalendarAlt />}
+                    {item.type === 'news' ? 'News' : 'Event'}
+                  </span>
+                  <span className="update-title">{item.title}</span>
+                  <span className="update-date">{formatDate(item.date)}</span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="no-data">
+              <p>No updates available right now.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Social Feed */}
+      <section className="section home-social-feed">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{socialFeedSection?.title || 'Social Feed'}</h2>
+              <p className="section-subtitle">
+                {socialFeedSection?.content || 'Fresh moments from our latest social updates.'}
+              </p>
+            </div>
+            <Link to="/gallery" className="btn btn-outline">
+              View Gallery <FaArrowRight />
+            </Link>
+          </div>
+
+          {socialPosts.length > 0 ? (
+            <div className="social-feed-grid">
+              {socialPosts.map((post) => (
+                <a
+                  key={post._id}
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-feed-card"
+                >
+                  <div className="social-feed-image">
+                    {post.image ? (
+                      <img
+                        src={resolveMediaUrl(post.image)}
+                        alt={post.title || post.platform}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div className="social-feed-placeholder">
+                        {post.platform || 'social'}
+                      </div>
+                    )}
+                  </div>
+                  <div className="social-feed-content">
+                    <span className={`social-feed-platform platform-${post.platform || 'other'}`}>
+                      {(post.platform || 'social').toUpperCase()}
+                    </span>
+                    <h3>{post.title || 'Bondhu Gosthi Update'}</h3>
+                    <p>{post.caption || 'Follow us for more community stories and updates.'}</p>
+                    <span className="social-feed-date">
+                      {post.postedAt ? formatDate(post.postedAt) : 'Just now'}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="no-data">
+              <p>No social posts yet. Add some from the admin panel.</p>
             </div>
           )}
         </div>
@@ -552,6 +929,163 @@ const Home = () => {
           </div>
         </section>
       )}
+
+      {/* Member Spotlight */}
+      <section className="section home-spotlight">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{spotlightSection?.title || 'Member Spotlight'}</h2>
+              <p className="section-subtitle">
+                {spotlightSection?.content || 'Meet the people powering Bondhu Gosthi.'}
+              </p>
+            </div>
+            <Link to="/members" className="btn btn-outline">
+              View All Members <FaArrowRight />
+            </Link>
+          </div>
+
+          {spotlightMembers.length > 0 ? (
+            <div className="spotlight-grid">
+              {spotlightMembers.map((member, index) => (
+                <motion.div
+                  key={member._id}
+                  className="spotlight-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="spotlight-avatar">
+                    {member.photo ? (
+                      <img
+                        src={resolveMediaUrl(member.photo)}
+                        alt={member.name}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span>{member.name?.charAt(0) || 'B'}</span>
+                    )}
+                  </div>
+                  <div className="spotlight-info">
+                    <h3>{member.name}</h3>
+                    <p className="spotlight-role">
+                      {(member.role || 'member').replace(/_/g, ' ')}
+                    </p>
+                    <p className="spotlight-bio">
+                      {member.bio || 'Dedicated member of the Bondhu Gosthi community.'}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-data">
+              <p>No spotlight members yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="section home-testimonials">
+        <div className="container">
+          <div className="section-header text-center">
+            <h2 className="section-title">{testimonialsSection?.title || 'Testimonials'}</h2>
+            <p className="section-subtitle">
+              {testimonialsSection?.content || 'Real words from our members and community.'}
+            </p>
+          </div>
+
+          {testimonials.length > 0 ? (
+            <Slider {...testimonialSettings} className="testimonial-slider">
+              {testimonials.map((testimonial) => (
+                <div key={testimonial._id} className="testimonial-slide">
+                  <div className="testimonial-card">
+                    <FaQuoteLeft className="testimonial-quote-icon" />
+                    <p className="testimonial-quote">"{testimonial.quote}"</p>
+                    <div className="testimonial-author">
+                      <div className="testimonial-avatar">
+                        {testimonial.photo ? (
+                          <img
+                            src={resolveMediaUrl(testimonial.photo)}
+                            alt={testimonial.name}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        ) : (
+                          <span>{testimonial.name?.charAt(0) || 'B'}</span>
+                        )}
+                      </div>
+                      <div>
+                        <h4>{testimonial.name}</h4>
+                        <span>{testimonial.role || 'Member'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <div className="no-data">
+              <p>No testimonials yet. Add some from the admin panel.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Press Mentions */}
+      <section className="section home-press">
+        <div className="container">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">{pressSection?.title || 'Press & Media'}</h2>
+              <p className="section-subtitle">
+                {pressSection?.content || 'Coverage and highlights from local media.'}
+              </p>
+            </div>
+          </div>
+
+          {pressMentions.length > 0 ? (
+            <div className="press-grid">
+              {pressMentions.map((mention) => (
+                <a
+                  key={mention._id}
+                  href={mention.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press-card"
+                >
+                  <div className="press-logo">
+                    {mention.logo ? (
+                      <img
+                        src={resolveMediaUrl(mention.logo)}
+                        alt={mention.outlet}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span>{mention.outlet.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div className="press-content">
+                    <span className="press-outlet">{mention.outlet}</span>
+                    <h3>{mention.title}</h3>
+                    <span className="press-date">
+                      {mention.date ? formatDate(mention.date) : 'Recently'}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="no-data">
+              <p>No press mentions yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="section cta-section">
