@@ -98,11 +98,19 @@ const Contact = () => {
   };
 
   const mapEmbedUrl = (() => {
-    const base = contactDetails.mapLink || 'https://www.google.com/maps?q=721454';
-    if (base.includes('output=embed')) {
-      return base;
+    const normalizeHttps = (value) => (value ? value.replace(/^http:\/\//i, 'https://') : '');
+    const link = normalizeHttps(contactDetails.mapLink || '');
+    if (link.includes('google.com/maps/embed')) {
+      return link;
     }
-    return base.includes('?') ? `${base}&output=embed` : `${base}?output=embed`;
+    if (link.includes('google.com/maps')) {
+      if (link.includes('output=embed')) {
+        return link;
+      }
+      return link.includes('?') ? `${link}&output=embed` : `${link}?output=embed`;
+    }
+    const query = encodeURIComponent(contactDetails.location || 'Dulalpur, Egra, West Bengal 721454');
+    return `https://www.google.com/maps?q=${query}&output=embed`;
   })();
 
   const businessHours = Array.isArray(siteSettings.businessHours)
