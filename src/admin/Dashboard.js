@@ -16,7 +16,9 @@ import {
   FaPlus,
   FaEdit,
   FaTrash,
-  FaLock
+  FaLock,
+  FaBolt,
+  FaChartLine
 } from 'react-icons/fa';
 import { dashboardAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -104,12 +106,70 @@ const Dashboard = () => {
     }
   ];
 
+  const summary = {
+    totalRecords:
+      (stats?.counts?.totalEvents || 0) +
+      (stats?.counts?.totalMembers || 0) +
+      (stats?.counts?.totalNews || 0) +
+      (stats?.counts?.totalGalleries || 0) +
+      (stats?.counts?.totalSports || 0) +
+      (stats?.counts?.totalSocialWork || 0),
+    upcomingEvents: stats?.counts?.upcomingEvents || 0,
+    newMessages: stats?.counts?.newMessages || 0
+  };
+
+  const quickActions = [
+    { label: 'Add Event', description: 'Create a new event', icon: <FaPlus />, link: '/admin/events' },
+    { label: 'Add News', description: 'Publish an update', icon: <FaNewspaper />, link: '/admin/news' },
+    { label: 'Add Member', description: 'Manage committee', icon: <FaUsers />, link: '/admin/members' },
+    { label: 'View Messages', description: 'Check inbox', icon: <FaEnvelope />, link: '/admin/contact' }
+  ];
+
   return (
     <div className="dashboard-page">
-      <div className="dashboard-header">
-        <div>
-          <h1 className="dashboard-title">Dashboard</h1>
-          <p className="dashboard-subtitle">Welcome back! Here's what's happening.</p>
+      <div className="dashboard-hero">
+        <div className="dashboard-hero-content">
+          <div className="dashboard-title-group">
+            <span className="dashboard-kicker">Admin Overview</span>
+            <h1 className="dashboard-title">Dashboard</h1>
+            <p className="dashboard-subtitle">Welcome back! Here is a live snapshot of your community.</p>
+          </div>
+          <div className="dashboard-meta">
+            <div className="meta-chip">
+              <FaChartLine />
+              <span>Total Records: {summary.totalRecords}</span>
+            </div>
+            <div className="meta-chip">
+              <FaClock />
+              <span>Upcoming Events: {summary.upcomingEvents}</span>
+            </div>
+            <div className="meta-chip">
+              <FaEnvelope />
+              <span>New Messages: {summary.newMessages}</span>
+            </div>
+          </div>
+        </div>
+        <div className="dashboard-hero-panel">
+          <div className="hero-panel-header">
+            <div>
+              <h2>Quick Actions</h2>
+              <p>Jump straight to the most common tasks.</p>
+            </div>
+            <span className="hero-panel-badge">
+              <FaBolt /> Fast Lane
+            </span>
+          </div>
+          <div className="hero-actions-grid">
+            {quickActions.map((action) => (
+              <Link key={action.label} to={action.link} className="hero-action-card">
+                <div className="hero-action-icon">{action.icon}</div>
+                <div>
+                  <div className="hero-action-title">{action.label}</div>
+                  <div className="hero-action-subtitle">{action.description}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
